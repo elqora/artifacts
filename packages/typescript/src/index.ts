@@ -1,10 +1,35 @@
+export type * from "./generated/wire.js";
+import type * as Generated from "./generated/wire.js";
+import {
+  ARTIFACT_CONDITION_KINDS,
+  ARTIFACT_INTEGRITY_ALGORITHMS,
+  ARTIFACT_PRIVACY_CLASSIFICATIONS,
+  ARTIFACT_PRIVACY_REPRESENTATIONS,
+  ARTIFACT_SOURCE_TYPES,
+  ARTIFACT_VALUE_OPERATORS,
+  ARTIFACT_VALUE_TYPES,
+  ARTIFACT_VERIFICATION_STATUSES,
+  LOCAL_ARTIFACT_SYNC_STATES,
+} from "./generated/vocabulary.js";
+export {
+  ARTIFACT_CONDITION_KINDS,
+  ARTIFACT_INTEGRITY_ALGORITHMS,
+  ARTIFACT_PRIVACY_CLASSIFICATIONS,
+  ARTIFACT_PRIVACY_REPRESENTATIONS,
+  ARTIFACT_SOURCE_TYPES,
+  ARTIFACT_VALUE_OPERATORS,
+  ARTIFACT_VALUE_TYPES,
+  ARTIFACT_VERIFICATION_STATUSES,
+  LOCAL_ARTIFACT_SYNC_STATES,
+};
+
 /** The schema version implemented by this binding. */
 export const ARTIFACT_PROTOCOL_VERSION = "1.0" as const;
 
 export type ArtifactProtocolVersion = typeof ARTIFACT_PROTOCOL_VERSION;
 
 /** Base fields carried by every top-level protocol record. */
-export interface ArtifactProtocolRecord {
+export interface ArtifactProtocolRecord extends Pick<Generated.WireArtifact, "schemaVersion"> {
   schemaVersion: ArtifactProtocolVersion;
 }
 
@@ -19,26 +44,6 @@ export type ArtifactVerificationId = string;
 
 /** Host extension data. Values must be JSON-serializable when encoded. */
 export type ArtifactMetadata = Record<string, unknown>;
-
-export const ARTIFACT_VALUE_TYPES = [
-  "text",
-  "number",
-  "boolean",
-  "currency",
-  "date",
-  "datetime",
-  "time",
-  "location",
-  "file",
-  "image",
-  "video",
-  "audio",
-  "link",
-  "structured",
-  "reference",
-  "signature",
-  "collection",
-] as const;
 
 export type ArtifactValueType = (typeof ARTIFACT_VALUE_TYPES)[number];
 
@@ -65,7 +70,7 @@ export interface ArtifactSubjectReference<TType extends string = string> {
 export interface Artifact<
   TKind extends string = ArtifactKind,
   TValueType extends ArtifactValueType = ArtifactValueType,
-> extends ArtifactProtocolRecord {
+> extends ArtifactProtocolRecord, Omit<Generated.WireArtifact, "scope" | "kind" | "valueType" | "createdBy" | "metadata"> {
   id: ArtifactId;
   scope?: ArtifactScopeReference;
   kind: TKind;
@@ -80,24 +85,16 @@ export interface Artifact<
   metadata?: ArtifactMetadata;
 }
 
-export interface InlineArtifactSource<TValue = unknown> {
+export interface InlineArtifactSource<TValue = unknown> extends Omit<Generated.WireInlineArtifactSource, "value"> {
   type: "inline";
   value: TValue;
   mediaType?: string;
 }
 
-export const LOCAL_ARTIFACT_SYNC_STATES = [
-  "local_only",
-  "pending_upload",
-  "uploading",
-  "uploaded",
-  "failed",
-] as const;
-
 export type LocalArtifactSyncState =
   (typeof LOCAL_ARTIFACT_SYNC_STATES)[number];
 
-export interface LocalArtifactSource {
+export interface LocalArtifactSource extends Generated.WireLocalArtifactSource {
   type: "local";
   localId: string;
   filename?: string;
@@ -107,7 +104,7 @@ export interface LocalArtifactSource {
   remoteVersionId?: ArtifactVersionId;
 }
 
-export interface ObjectArtifactSource {
+export interface ObjectArtifactSource extends Generated.WireObjectArtifactSource {
   type: "object";
   objectId: string;
   filename?: string;
@@ -116,14 +113,14 @@ export interface ObjectArtifactSource {
   storageProvider?: string;
 }
 
-export interface UrlArtifactSource {
+export interface UrlArtifactSource extends Generated.WireUrlArtifactSource {
   type: "url";
   url: string;
   provider?: string;
   mediaType?: string;
 }
 
-export interface HostedArtifactSource {
+export interface HostedArtifactSource extends Generated.WireHostedArtifactSource {
   type: "hosted";
   recordType: string;
   recordId: string;
@@ -132,20 +129,11 @@ export interface HostedArtifactSource {
 export interface ProviderArtifactSource<
   TProvider extends string = string,
   TReference = unknown,
-> {
+> extends Omit<Generated.WireProviderArtifactSource, "provider" | "reference"> {
   type: "provider";
   provider: TProvider;
   reference: TReference;
 }
-
-export const ARTIFACT_SOURCE_TYPES = [
-  "inline",
-  "local",
-  "object",
-  "url",
-  "hosted",
-  "provider",
-] as const;
 
 export type ArtifactSource =
   | InlineArtifactSource
@@ -155,16 +143,10 @@ export type ArtifactSource =
   | HostedArtifactSource
   | ProviderArtifactSource;
 
-export const ARTIFACT_INTEGRITY_ALGORITHMS = [
-  "sha256",
-  "sha384",
-  "sha512",
-] as const;
-
 export type ArtifactIntegrityAlgorithm =
   (typeof ARTIFACT_INTEGRITY_ALGORITHMS)[number];
 
-export interface ArtifactIntegrity {
+export interface ArtifactIntegrity extends Generated.WireArtifactIntegrity {
   algorithm: ArtifactIntegrityAlgorithm;
   hash: string;
   size?: number;
@@ -173,7 +155,7 @@ export interface ArtifactIntegrity {
 
 export interface ArtifactVersion<
   TSource extends ArtifactSource = ArtifactSource,
-> extends ArtifactProtocolRecord {
+> extends ArtifactProtocolRecord, Omit<Generated.WireArtifactVersion, "source" | "integrity" | "createdBy" | "metadata"> {
   id: ArtifactVersionId;
   artifactId: ArtifactId;
   version: number;
@@ -188,7 +170,7 @@ export interface ArtifactVersion<
 export interface ArtifactLink<
   TRole extends string = ArtifactRole,
   TSubjectType extends string = string,
-> extends ArtifactProtocolRecord {
+> extends ArtifactProtocolRecord, Omit<Generated.WireArtifactLink, "subject" | "role" | "createdBy" | "metadata"> {
   id: ArtifactLinkId;
   artifactId: ArtifactId;
   /** Omit to follow the logical artifact; provide to pin immutable content. */
@@ -201,61 +183,53 @@ export interface ArtifactLink<
   metadata?: ArtifactMetadata;
 }
 
-export const ARTIFACT_CONDITION_KINDS = [
-  "state", "actor", "artifact_exists", "artifact_value", "and", "or", "not",
-] as const;
-
-export const ARTIFACT_VALUE_OPERATORS = [
-  "eq", "neq", "gt", "gte", "lt", "lte", "contains", "in",
-] as const;
-
 export type ArtifactValueOperator = (typeof ARTIFACT_VALUE_OPERATORS)[number];
 
-export interface ArtifactStateCondition {
+export interface ArtifactStateCondition extends Generated.WireArtifactConditionState {
   kind: "state";
   namespace: string;
   in: string[];
 }
 
-export interface ArtifactActorCondition {
+export interface ArtifactActorCondition extends Generated.WireArtifactConditionActor {
   kind: "actor";
   in: string[];
 }
 
-export interface ArtifactExistsCondition {
+export interface ArtifactExistsCondition extends Generated.WireArtifactConditionArtifactExists {
   kind: "artifact_exists";
   artifact: string;
 }
 
-export interface ArtifactValueCondition<TValue = unknown> {
+export interface ArtifactValueCondition<TValue = unknown> extends Omit<Generated.WireArtifactConditionArtifactValue, "value"> {
   kind: "artifact_value";
   artifact: string;
   operator: ArtifactValueOperator;
   value: TValue;
 }
 
-export interface ArtifactAndCondition { kind: "and"; conditions: ArtifactCondition[]; }
-export interface ArtifactOrCondition { kind: "or"; conditions: ArtifactCondition[]; }
-export interface ArtifactNotCondition { kind: "not"; condition: ArtifactCondition; }
+export interface ArtifactAndCondition extends Omit<Generated.WireArtifactConditionAnd, "conditions"> { kind: "and"; conditions: ArtifactCondition[]; }
+export interface ArtifactOrCondition extends Omit<Generated.WireArtifactConditionOr, "conditions"> { kind: "or"; conditions: ArtifactCondition[]; }
+export interface ArtifactNotCondition extends Omit<Generated.WireArtifactConditionNot, "condition"> { kind: "not"; condition: ArtifactCondition; }
 
 export type ArtifactCondition =
   | ArtifactStateCondition | ArtifactActorCondition | ArtifactExistsCondition
   | ArtifactValueCondition | ArtifactAndCondition | ArtifactOrCondition
   | ArtifactNotCondition;
 
-export interface ArtifactProviderPolicy {
+export interface ArtifactProviderPolicy extends Generated.WireArtifactProviderPolicy {
   actors: string[];
   mode?: "single" | "any" | "all";
   delegation?: "forbidden" | "allowed";
 }
 
-export interface ArtifactRequirementPolicy {
+export interface ArtifactRequirementPolicy extends Omit<Generated.WireArtifactRequirementPolicy, "condition"> {
   mode: "required" | "optional" | "conditional";
   condition?: ArtifactCondition;
   blocks?: string[];
 }
 
-export interface ArtifactLifecyclePolicy {
+export interface ArtifactLifecyclePolicy extends Omit<Generated.WireArtifactLifecyclePolicy, "condition"> {
   createAt?: string;
   editableDuring?: string[];
   submitDuring?: string[];
@@ -264,65 +238,59 @@ export interface ArtifactLifecyclePolicy {
   condition?: ArtifactCondition;
 }
 
-export interface ArtifactAccessRule {
+export interface ArtifactAccessRule extends Omit<Generated.WireArtifactAccessPolicyRule, "condition"> {
   actors: string[];
   condition?: ArtifactCondition;
 }
 
-export interface ArtifactAccessPolicy {
+export interface ArtifactAccessPolicy extends Omit<Generated.WireArtifactAccessPolicy, "read" | "write" | "submit" | "verify"> {
   read?: ArtifactAccessRule[];
   write?: ArtifactAccessRule[];
   submit?: ArtifactAccessRule[];
   verify?: ArtifactAccessRule[];
 }
 
-export const ARTIFACT_PRIVACY_CLASSIFICATIONS = [
-  "public", "internal", "private", "sensitive", "restricted",
-] as const;
 export type ArtifactPrivacyClassification =
   (typeof ARTIFACT_PRIVACY_CLASSIFICATIONS)[number];
 
-export const ARTIFACT_PRIVACY_REPRESENTATIONS = [
-  "hidden", "masked", "approximate", "full",
-] as const;
 export type ArtifactPrivacyRepresentation =
   (typeof ARTIFACT_PRIVACY_REPRESENTATIONS)[number];
 
-export interface ArtifactRevealRule {
+export interface ArtifactRevealRule extends Omit<Generated.WireArtifactRevealRule, "when"> {
   actors: string[];
   when?: ArtifactCondition;
   representation: ArtifactPrivacyRepresentation;
 }
 
-export interface ArtifactMaskingPolicy {
+export interface ArtifactMaskingPolicy extends Generated.WireArtifactMaskingPolicy {
   strategy: string;
   config?: Record<string, unknown>;
 }
 
-export interface ArtifactEncryptionPolicy {
+export interface ArtifactEncryptionPolicy extends Generated.WireArtifactEncryptionPolicy {
   required: boolean;
   level?: string;
   keyScope?: string;
 }
 
-export interface ArtifactPrivacyPolicy {
+export interface ArtifactPrivacyPolicy extends Omit<Generated.WireArtifactPrivacyPolicy, "reveal" | "masking" | "encryption"> {
   classification: ArtifactPrivacyClassification;
   reveal?: ArtifactRevealRule[];
   masking?: ArtifactMaskingPolicy;
   encryption?: ArtifactEncryptionPolicy;
 }
 
-export interface ArtifactValidationRule {
+export interface ArtifactValidationRule extends Generated.WireArtifactValidationRule {
   type: string;
   config?: Record<string, unknown>;
 }
 
-export interface ArtifactValidationPolicy {
+export interface ArtifactValidationPolicy extends Omit<Generated.WireArtifactValidationPolicy, "rules"> {
   mode?: "strict" | "lenient";
   rules?: ArtifactValidationRule[];
 }
 
-export interface ArtifactVerificationPolicy {
+export interface ArtifactVerificationPolicy extends Omit<Generated.WireArtifactVerificationPolicy, "condition"> {
   required: boolean;
   methods?: string[];
   actors?: string[];
@@ -335,7 +303,7 @@ export type ArtifactRetentionPolicy =
   | { policy: "until"; date: string }
   | { policy: "host_defined"; key: string };
 
-export interface ArtifactPresentationPolicy {
+export interface ArtifactPresentationPolicy extends Generated.WireArtifactPresentationPolicy {
   label?: string;
   helpText?: string;
   order?: number;
@@ -343,23 +311,23 @@ export interface ArtifactPresentationPolicy {
   config?: Record<string, unknown>;
 }
 
-export interface TextArtifactValueSchema { valueType: "text"; minLength?: number; maxLength?: number; multiline?: boolean; pattern?: string; }
-export interface NumberArtifactValueSchema { valueType: "number"; minimum?: number; maximum?: number; integer?: boolean; multipleOf?: number; }
-export interface BooleanArtifactValueSchema { valueType: "boolean"; }
-export interface CurrencyArtifactValueSchema { valueType: "currency"; currencies?: string[]; minimumMinorUnits?: number; maximumMinorUnits?: number; }
-export interface DateArtifactValueSchema { valueType: "date"; minimum?: string; maximum?: string; }
-export interface DatetimeArtifactValueSchema { valueType: "datetime"; minimum?: string; maximum?: string; }
-export interface TimeArtifactValueSchema { valueType: "time"; minimum?: string; maximum?: string; }
-export interface LocationArtifactValueSchema { valueType: "location"; mode: "point" | "address" | "point_and_address"; requireCoordinates?: boolean; allowManualEntry?: boolean; }
-export interface FileArtifactValueSchema { valueType: "file"; minFiles?: number; maxFiles?: number; acceptedMimeTypes?: string[]; maxSizeBytes?: number; }
-export interface ImageArtifactValueSchema extends Omit<FileArtifactValueSchema, "valueType"> { valueType: "image"; requireTimestamp?: boolean; requireLocation?: boolean; }
-export interface VideoArtifactValueSchema extends Omit<FileArtifactValueSchema, "valueType"> { valueType: "video"; maxDurationSeconds?: number; }
-export interface AudioArtifactValueSchema extends Omit<FileArtifactValueSchema, "valueType"> { valueType: "audio"; maxDurationSeconds?: number; }
-export interface LinkArtifactValueSchema { valueType: "link"; allowedSchemes?: string[]; allowedHosts?: string[]; }
-export interface StructuredArtifactValueSchema { valueType: "structured"; jsonSchema?: Record<string, unknown>; }
-export interface ReferenceArtifactValueSchema { valueType: "reference"; providers?: string[]; resourceTypes?: string[]; }
-export interface SignatureArtifactValueSchema { valueType: "signature"; methods?: string[]; requireTimestamp?: boolean; }
-export interface CollectionArtifactValueSchema { valueType: "collection"; itemSchema: ArtifactValueSchema; minItems?: number; maxItems?: number; uniqueItems?: boolean; }
+export interface TextArtifactValueSchema extends Generated.WireArtifactValueSchemaText { valueType: "text"; }
+export interface NumberArtifactValueSchema extends Generated.WireArtifactValueSchemaNumber { valueType: "number"; }
+export interface BooleanArtifactValueSchema extends Generated.WireArtifactValueSchemaBoolean { valueType: "boolean"; }
+export interface CurrencyArtifactValueSchema extends Generated.WireArtifactValueSchemaCurrency { valueType: "currency"; }
+export interface DateArtifactValueSchema extends Generated.WireArtifactValueSchemaDate { valueType: "date"; }
+export interface DatetimeArtifactValueSchema extends Generated.WireArtifactValueSchemaDatetime { valueType: "datetime"; }
+export interface TimeArtifactValueSchema extends Generated.WireArtifactValueSchemaTime { valueType: "time"; }
+export interface LocationArtifactValueSchema extends Generated.WireArtifactValueSchemaLocation { valueType: "location"; }
+export interface FileArtifactValueSchema extends Generated.WireArtifactValueSchemaFile { valueType: "file"; }
+export interface ImageArtifactValueSchema extends Generated.WireArtifactValueSchemaImage { valueType: "image"; }
+export interface VideoArtifactValueSchema extends Generated.WireArtifactValueSchemaVideo { valueType: "video"; }
+export interface AudioArtifactValueSchema extends Generated.WireArtifactValueSchemaAudio { valueType: "audio"; }
+export interface LinkArtifactValueSchema extends Generated.WireArtifactValueSchemaLink { valueType: "link"; }
+export interface StructuredArtifactValueSchema extends Generated.WireArtifactValueSchemaStructured { valueType: "structured"; }
+export interface ReferenceArtifactValueSchema extends Generated.WireArtifactValueSchemaReference { valueType: "reference"; }
+export interface SignatureArtifactValueSchema extends Generated.WireArtifactValueSchemaSignature { valueType: "signature"; }
+export interface CollectionArtifactValueSchema extends Omit<Generated.WireArtifactValueSchemaCollection, "itemSchema"> { valueType: "collection"; itemSchema: ArtifactValueSchema; }
 
 export type ArtifactValueSchema =
   | TextArtifactValueSchema | NumberArtifactValueSchema | BooleanArtifactValueSchema
@@ -377,7 +345,7 @@ export interface ArtifactSpec<
   TKind extends string = ArtifactKind,
   TValueType extends ArtifactValueType = ArtifactValueType,
   TConfig extends object = ArtifactValueConfig<TValueType>,
-> extends ArtifactProtocolRecord {
+> extends ArtifactProtocolRecord, Omit<Generated.WireArtifactSpec, "kind" | "valueType" | "config" | "provider" | "requirement" | "lifecycle" | "access" | "privacy" | "validation" | "verification" | "retention" | "presentation" | "metadata"> {
   id: ArtifactSpecId;
   key: string;
   name: string;
@@ -407,7 +375,7 @@ export type ArtifactSpecSnapshot<
   sourceVersion: number;
 };
 
-export interface ArtifactRequirement extends ArtifactProtocolRecord {
+export interface ArtifactRequirement extends ArtifactProtocolRecord, Omit<Generated.WireArtifactRequirement, "metadata"> {
   id: ArtifactRequirementId;
   key?: string;
   allowedKinds?: string[];
@@ -419,7 +387,7 @@ export interface ArtifactRequirement extends ArtifactProtocolRecord {
   metadata?: ArtifactMetadata;
 }
 
-export interface ArtifactSubmissionContext {
+export interface ArtifactSubmissionContext extends Generated.WireArtifactSubmissionContext {
   latitude?: number;
   longitude?: number;
   deviceId?: string;
@@ -427,7 +395,7 @@ export interface ArtifactSubmissionContext {
   userAgent?: string;
 }
 
-export interface ArtifactSubmission<TValue = unknown> extends ArtifactProtocolRecord {
+export interface ArtifactSubmission<TValue = unknown> extends ArtifactProtocolRecord, Omit<Generated.WireArtifactSubmission, "submittedBy" | "value" | "context" | "metadata"> {
   id: ArtifactSubmissionId;
   artifactId: ArtifactId;
   artifactVersionId?: ArtifactVersionId;
@@ -438,13 +406,10 @@ export interface ArtifactSubmission<TValue = unknown> extends ArtifactProtocolRe
   metadata?: ArtifactMetadata;
 }
 
-export const ARTIFACT_VERIFICATION_STATUSES = [
-  "pending", "verified", "rejected", "waived",
-] as const;
 export type ArtifactVerificationStatus =
   (typeof ARTIFACT_VERIFICATION_STATUSES)[number];
 
-export interface ArtifactVerification extends ArtifactProtocolRecord {
+export interface ArtifactVerification extends ArtifactProtocolRecord, Omit<Generated.WireArtifactVerification, "verifiedBy" | "metadata"> {
   id: ArtifactVerificationId;
   artifactId: ArtifactId;
   artifactVersionId?: ArtifactVersionId;

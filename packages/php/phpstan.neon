@@ -1,0 +1,10 @@
+parameters:
+    level: 6
+    paths:
+        - src
+        - ../../extensions/github/php
+        - ../../tests/php
+    excludePaths:
+        analyse:
+            - vendor
+            - src/Contracts.php

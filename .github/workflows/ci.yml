@@ -1,0 +1,84 @@
+name: conformance
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  full-conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.22.x
+          cache-dependency-path: |
+            packages/go/go.mod
+            extensions/github/go/go.mod
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer:v2
+      - run: npm ci
+      - run: composer install --working-dir=packages/php --no-interaction --prefer-dist
+      - run: npm test
+
+  typescript-compatibility:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run check:generated
+      - run: npm run test:generator
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm run test:conformance
+
+  php-compatibility:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ["8.2", "8.4"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+      - run: composer install --working-dir=packages/php --no-interaction --prefer-dist
+      - run: php tests/php/conformance.php
+      - run: php packages/php/vendor/bin/phpstan analyse --configuration=packages/php/phpstan.neon
+      - run: composer validate --strict packages/php/composer.json
+      - run: composer validate --strict extensions/github/php/composer.json
+
+  go-compatibility:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: ["1.22.x", "stable"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go }}
+          cache-dependency-path: |
+            packages/go/go.mod
+            extensions/github/go/go.mod
+      - run: go -C packages/go test ./...
+      - run: go -C packages/go vet ./...
+      - run: go -C extensions/github/go test ./...
+      - run: go -C extensions/github/go vet ./...

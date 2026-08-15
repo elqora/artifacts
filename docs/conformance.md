@@ -15,3 +15,8 @@ and definition snapshots must remain immutable after capture.
 TypeScript compilation proves its type contracts. PHP and Go tests deserialize
 and reserialize the same fixture corpus as generic JSON maps so unknown fields
 and opaque provider references are preserved without semantic change.
+
+The root `npm test` also runs generator behavior tests, PHP DTO and PHPStan
+checks, Go decoder tests and `go vet` for both modules, Composer validation, and
+TypeScript package dry-runs. GitHub Actions repeats full conformance and tests
+the supported Node, PHP, and Go version floors.

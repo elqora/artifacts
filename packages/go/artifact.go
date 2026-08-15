@@ -1,4 +1,8 @@
 // Package artifact exposes Artifact Protocol 1.0 records without implementing host behavior.
+//
+// The original unprefixed structs remain as a source-compatible facade. New
+// integrations should prefer the schema-generated Wire* contracts and the
+// discriminator-aware DecodeSource, DecodeCondition, and DecodeValueSchema helpers.
 package artifact
 
 import "encoding/json"

@@ -11,6 +11,11 @@ import {
   type ArtifactSpecSnapshot,
   type ArtifactSubmission,
   type ArtifactVerification,
+  type WireArtifact,
+  type WireArtifactSpec,
+  type WireArtifactSubmission,
+  type WireArtifactVerification,
+  type WireProviderArtifactSource,
 } from "../../packages/typescript/src/index.js";
 
 const actor = { type: "host_actor", id: "actor_1" };
@@ -137,3 +142,15 @@ const verification = {
 
 void snapshot;
 void verification;
+
+// The ergonomic generic facade must remain assignable to schema-generated wire contracts.
+const generatedArtifact: WireArtifact = artifact;
+const generatedProviderSource: WireProviderArtifactSource = providerSource;
+const generatedSpec: WireArtifactSpec = imageSpec;
+const generatedSubmission: WireArtifactSubmission = submission;
+const generatedVerification: WireArtifactVerification = verification;
+void generatedArtifact;
+void generatedProviderSource;
+void generatedSpec;
+void generatedSubmission;
+void generatedVerification;

@@ -1,14 +1,17 @@
-export interface GitHubNumberedReference {
+export type * from "./generated/wire.js";
+import type * as Generated from "./generated/wire.js";
+
+export interface GitHubNumberedReference extends Generated.WireGitHubArtifactReferenceNumbered {
   repositoryId: number;
   number: number;
   nodeId?: string;
 }
-export interface GitHubPullRequestReference extends GitHubNumberedReference { resource: "pull_request"; }
-export interface GitHubIssueReference extends GitHubNumberedReference { resource: "issue"; }
-export interface GitHubDiscussionReference extends GitHubNumberedReference { resource: "discussion"; }
-export interface GitHubCommitReference { resource: "commit"; repositoryId: number; sha: string; }
-export interface GitHubDeploymentReference { resource: "deployment"; repositoryId: number; deploymentId: number; }
-export interface GitHubWorkflowRunReference { resource: "workflow_run"; repositoryId: number; runId: number; }
-export interface GitHubCheckRunReference { resource: "check_run"; repositoryId: number; checkRunId: number; }
+export interface GitHubPullRequestReference extends Generated.WireGitHubArtifactReferencePullRequest { resource: "pull_request"; }
+export interface GitHubIssueReference extends Generated.WireGitHubArtifactReferenceIssue { resource: "issue"; }
+export interface GitHubDiscussionReference extends Generated.WireGitHubArtifactReferenceDiscussion { resource: "discussion"; }
+export interface GitHubCommitReference extends Generated.WireGitHubArtifactReferenceCommit { resource: "commit"; }
+export interface GitHubDeploymentReference extends Generated.WireGitHubArtifactReferenceDeployment { resource: "deployment"; }
+export interface GitHubWorkflowRunReference extends Generated.WireGitHubArtifactReferenceWorkflowRun { resource: "workflow_run"; }
+export interface GitHubCheckRunReference extends Generated.WireGitHubArtifactReferenceCheckRun { resource: "check_run"; }
 export type GitHubArtifactReference = GitHubPullRequestReference | GitHubCommitReference | GitHubIssueReference | GitHubDiscussionReference | GitHubDeploymentReference | GitHubWorkflowRunReference | GitHubCheckRunReference;
-export interface GitHubArtifactSource { type: "provider"; provider: "github"; reference: GitHubArtifactReference; }
+export interface GitHubArtifactSource extends Omit<Generated.WireGitHubArtifactSource, "reference"> { type: "provider"; provider: "github"; reference: GitHubArtifactReference; }

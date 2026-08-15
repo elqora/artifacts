@@ -12,8 +12,12 @@
     "check:generated": "node generators/generate-bindings.mjs --check",
     "typecheck": "tsc -p packages/typescript/tsconfig.json --noEmit && tsc -p extensions/github/typescript/tsconfig.json --noEmit && tsc -p tests/typescript/tsconfig.json --noEmit",
     "test:php": "php tests/php/conformance.php",
+    "test:phpstan": "php packages/php/vendor/bin/phpstan analyse --configuration=packages/php/phpstan.neon",
+    "test:go": "node scripts/run-go-checks.mjs",
+    "test:packages": "node scripts/validate-packages.mjs",
     "test:conformance": "node --test tests/conformance/*.test.mjs",
-    "test": "npm run check:generated && npm run typecheck && npm run build && npm run test:conformance && npm run test:php"
+    "test:generator": "node --test tests/generator/*.test.mjs",
+    "test": "npm run check:generated && npm run test:generator && npm run typecheck && npm run build && npm run test:conformance && npm run test:php && npm run test:phpstan && npm run test:go && npm run test:packages"
   },
   "devDependencies": {
     "ajv": "^8.20.0",

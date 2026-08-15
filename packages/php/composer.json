@@ -4,5 +4,6 @@
   "type": "library",
   "license": "AGPL-3.0-only",
   "require": { "php": ">=8.2" },
+  "require-dev": { "phpstan/phpstan": "^2.1" },
   "autoload": { "psr-4": { "Elqora\\Artifact\\": "src/" } }
 }

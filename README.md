@@ -19,23 +19,24 @@ authority; the TypeScript package is the first developer-facing binding.
 
 ## Development
 
-Core schema and TypeScript development requires Node.js 20 or newer. The full
-local suite also exercises the PHP binding when PHP 8.2+ is available; Go
-conformance can be run separately with Go 1.22+.
+The full suite requires Node.js 20+, PHP 8.2+, Composer, and Go 1.22+. If Go is
+not installed locally, the test runner uses Docker with the Go 1.22 image.
 
 ```sh
 npm install
+composer install --working-dir=packages/php
 npm test
 npm run build
 npm run generate
-
-# when Go is installed
-cd packages/go && go test ./...
 ```
 
 The canonical schemas implement Artifact Protocol `1.0` using JSON Schema
 Draft 2020-12. Run `npm run check:generated` to prove generated binding
 vocabularies match those schemas.
+
+`npm test` validates deterministic generation, TypeScript, every JSON Schema
+fixture, generated PHP DTOs and static analysis, both Go modules, package
+manifests, and package contents.
 
 Start with [architecture](./docs/architecture.md),
 [terminology](./docs/terminology.md), and
