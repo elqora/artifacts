@@ -1,0 +1,10 @@
+{
+  "name": "@elqora/artifact-github",
+  "version": "0.1.0",
+  "description": "Typed GitHub references for the Artifact Protocol; no GitHub API client.",
+  "type": "module",
+  "sideEffects": false,
+  "files": ["dist"],
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "license": "AGPL-3.0-only"
+}

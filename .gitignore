@@ -134,3 +134,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# TypeScript reference binding build output
+packages/typescript/dist/
+extensions/github/typescript/dist/

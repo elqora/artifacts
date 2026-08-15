@@ -1,0 +1,5 @@
+{
+  "type": "provider",
+  "provider": "github",
+  "reference": { "resource": "pull_request", "repositoryId": 845121, "number": 58, "nodeId": "PR_kwDOExample" }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/extensions/github/github-source.schema.json",
+  "title": "GitHubArtifactSource",
+  "type": "object",
+  "required": ["type", "provider", "reference"],
+  "properties": {
+    "type": { "const": "provider" },
+    "provider": { "const": "github" },
+    "reference": { "$ref": "https://artifact-sdk.dev/schema/1.0/extensions/github/github-reference.schema.json" }
+  },
+  "additionalProperties": true
+}

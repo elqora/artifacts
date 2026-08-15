@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0",
+  "id": "artver_implementation_1",
+  "artifactId": "art_implementation",
+  "version": 1,
+  "source": {
+    "type": "provider",
+    "provider": "code_forge",
+    "reference": {
+      "resource": "change_request",
+      "repository": "repo_845121",
+      "number": 58
+    }
+  },
+  "createdBy": {
+    "type": "developer",
+    "id": "developer_9"
+  },
+  "createdAt": "2026-08-15T11:30:00Z"
+}
+

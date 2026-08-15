@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/specification/artifact-value-schema.schema.json",
+  "title": "ArtifactValueSchema",
+  "description": "Standardized representation constraints. Artifact kind remains a separate host-defined semantic identifier.",
+  "oneOf": [
+    { "$ref": "#/$defs/text" }, { "$ref": "#/$defs/number" },
+    { "$ref": "#/$defs/boolean" }, { "$ref": "#/$defs/currency" },
+    { "$ref": "#/$defs/date" }, { "$ref": "#/$defs/datetime" },
+    { "$ref": "#/$defs/time" }, { "$ref": "#/$defs/location" },
+    { "$ref": "#/$defs/file" }, { "$ref": "#/$defs/image" },
+    { "$ref": "#/$defs/video" }, { "$ref": "#/$defs/audio" },
+    { "$ref": "#/$defs/link" }, { "$ref": "#/$defs/structured" },
+    { "$ref": "#/$defs/reference" }, { "$ref": "#/$defs/signature" },
+    { "$ref": "#/$defs/collection" }
+  ],
+  "$defs": {
+    "text": {
+      "type": "object", "required": ["valueType"],
+      "properties": { "valueType": { "const": "text" }, "minLength": { "type": "integer", "minimum": 0 }, "maxLength": { "type": "integer", "minimum": 0 }, "multiline": { "type": "boolean" }, "pattern": { "type": "string" } },
+      "additionalProperties": true
+    },
+    "number": {
+      "type": "object", "required": ["valueType"],
+      "properties": { "valueType": { "const": "number" }, "minimum": { "type": "number" }, "maximum": { "type": "number" }, "integer": { "type": "boolean" }, "multipleOf": { "type": "number", "exclusiveMinimum": 0 } },
+      "additionalProperties": true
+    },
+    "boolean": { "type": "object", "required": ["valueType"], "properties": { "valueType": { "const": "boolean" } }, "additionalProperties": true },
+    "currency": {
+      "type": "object", "required": ["valueType"],
+      "properties": { "valueType": { "const": "currency" }, "currencies": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^[A-Z]{3}$" } }, "minimumMinorUnits": { "type": "integer" }, "maximumMinorUnits": { "type": "integer" } },
+      "additionalProperties": true
+    },
+    "date": {
+      "type": "object", "required": ["valueType"],
+      "properties": { "valueType": { "const": "date" }, "minimum": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/date" }, "maximum": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/date" } },
+      "additionalProperties": true
+    },
+    "datetime": {
+      "type": "object", "required": ["valueType"],
+      "properties": { "valueType": { "const": "datetime" }, "minimum": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/timestamp" }, "maximum": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/timestamp" } },
+      "additionalProperties": true
+    },
+    "time": {
+      "type": "object", "required": ["valueType"],
+      "properties": { "valueType": { "const": "time" }, "minimum": { "type": "string", "format": "time" }, "maximum": { "type": "string", "format": "time" } },
+      "additionalProperties": true
+    },
+    "location": {
+      "type": "object", "required": ["valueType", "mode"],
+      "properties": { "valueType": { "const": "location" }, "mode": { "enum": ["point", "address", "point_and_address"] }, "requireCoordinates": { "type": "boolean" }, "allowManualEntry": { "type": "boolean" } },
+      "additionalProperties": true
+    },
+    "file": {
+      "allOf": [
+        { "$ref": "#/$defs/fileBase" },
+        { "type": "object", "required": ["valueType"], "properties": { "valueType": { "const": "file" } }, "additionalProperties": true }
+      ]
+    },
+    "image": {
+      "allOf": [
+        { "$ref": "#/$defs/fileBase" },
+        { "type": "object", "required": ["valueType"], "properties": { "valueType": { "const": "image" }, "requireTimestamp": { "type": "boolean" }, "requireLocation": { "type": "boolean" } }, "additionalProperties": true }
+      ]
+    },
+    "video": {
+      "allOf": [
+        { "$ref": "#/$defs/fileBase" },
+        { "type": "object", "required": ["valueType"], "properties": { "valueType": { "const": "video" }, "maxDurationSeconds": { "type": "number", "exclusiveMinimum": 0 } }, "additionalProperties": true }
+      ]
+    },
+    "audio": {
+      "allOf": [
+        { "$ref": "#/$defs/fileBase" },
+        { "type": "object", "required": ["valueType"], "properties": { "valueType": { "const": "audio" }, "maxDurationSeconds": { "type": "number", "exclusiveMinimum": 0 } }, "additionalProperties": true }
+      ]
+    },
+    "fileBase": {
+      "type": "object",
+      "properties": { "minFiles": { "type": "integer", "minimum": 0 }, "maxFiles": { "type": "integer", "minimum": 0 }, "acceptedMimeTypes": { "type": "array", "items": { "type": "string", "minLength": 1 } }, "maxSizeBytes": { "type": "integer", "minimum": 0 } },
+      "additionalProperties": true
+    },
+    "link": {
+      "type": "object", "required": ["valueType"],
+      "properties": { "valueType": { "const": "link" }, "allowedSchemes": { "type": "array", "items": { "type": "string", "minLength": 1 } }, "allowedHosts": { "type": "array", "items": { "type": "string", "minLength": 1 } } },
+      "additionalProperties": true
+    },
+    "structured": {
+      "type": "object", "required": ["valueType"],
+      "properties": { "valueType": { "const": "structured" }, "jsonSchema": { "type": "object", "additionalProperties": true } },
+      "additionalProperties": true
+    },
+    "reference": {
+      "type": "object", "required": ["valueType"],
+      "properties": { "valueType": { "const": "reference" }, "providers": { "type": "array", "items": { "type": "string", "minLength": 1 } }, "resourceTypes": { "type": "array", "items": { "type": "string", "minLength": 1 } } },
+      "additionalProperties": true
+    },
+    "signature": {
+      "type": "object", "required": ["valueType"],
+      "properties": { "valueType": { "const": "signature" }, "methods": { "type": "array", "items": { "type": "string", "minLength": 1 } }, "requireTimestamp": { "type": "boolean" } },
+      "additionalProperties": true
+    },
+    "collection": {
+      "type": "object", "required": ["valueType", "itemSchema"],
+      "properties": { "valueType": { "const": "collection" }, "itemSchema": { "$ref": "#" }, "minItems": { "type": "integer", "minimum": 0 }, "maxItems": { "type": "integer", "minimum": 0 }, "uniqueItems": { "type": "boolean" } },
+      "additionalProperties": true
+    }
+  }
+}

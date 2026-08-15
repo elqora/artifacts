@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json",
+  "title": "Artifact Protocol Common Contracts",
+  "description": "Reusable contracts for Artifact Protocol 1.0 records.",
+  "$defs": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0",
+      "description": "The major.minor version of the serialized Artifact Protocol record."
+    },
+    "opaqueIdentifier": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A non-empty, case-sensitive identifier whose generation and internal form are host-defined."
+    },
+    "artifactId": {
+      "$ref": "#/$defs/opaqueIdentifier"
+    },
+    "artifactVersionId": {
+      "$ref": "#/$defs/opaqueIdentifier"
+    },
+    "artifactLinkId": {
+      "$ref": "#/$defs/opaqueIdentifier"
+    },
+    "artifactSpecId": {
+      "$ref": "#/$defs/opaqueIdentifier"
+    },
+    "artifactSubmissionId": {
+      "$ref": "#/$defs/opaqueIdentifier"
+    },
+    "artifactVerificationId": {
+      "$ref": "#/$defs/opaqueIdentifier"
+    },
+    "artifactRequirementId": {
+      "$ref": "#/$defs/opaqueIdentifier"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "An RFC 3339 full-date string."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "An RFC 3339 date-time string."
+    },
+    "artifactValueType": {
+      "type": "string",
+      "enum": [
+        "text",
+        "number",
+        "boolean",
+        "currency",
+        "date",
+        "datetime",
+        "time",
+        "location",
+        "file",
+        "image",
+        "video",
+        "audio",
+        "link",
+        "structured",
+        "reference",
+        "signature",
+        "collection"
+      ]
+    },
+    "actorReference": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "$ref": "#/$defs/opaqueIdentifier"
+        },
+        "displayName": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "artifactScopeReference": {
+      "type": "object",
+      "required": ["type", "id"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "$ref": "#/$defs/opaqueIdentifier"
+        }
+      },
+      "additionalProperties": true
+    },
+    "artifactSubjectReference": {
+      "type": "object",
+      "required": ["type", "id"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "$ref": "#/$defs/opaqueIdentifier"
+        },
+        "scope": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "artifactMetadata": {
+      "type": "object",
+      "description": "Host extensions represented by arbitrary JSON values.",
+      "additionalProperties": true
+    }
+  }
+}

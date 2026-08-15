@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "id": "art_delivery_note",
+  "scope": {
+    "type": "workspace",
+    "id": "workspace_alpha"
+  },
+  "kind": "delivery_note",
+  "valueType": "text",
+  "title": "Delivery note",
+  "createdBy": {
+    "type": "member",
+    "id": "actor_42",
+    "displayName": "Example Member"
+  },
+  "createdAt": "2026-08-15T09:00:00Z",
+  "updatedAt": "2026-08-15T09:00:00Z",
+  "metadata": {
+    "hostLabel": "handover"
+  }
+}
+

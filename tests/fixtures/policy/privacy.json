@@ -1,0 +1,9 @@
+{
+  "classification": "restricted",
+  "reveal": [
+    { "actors": ["reviewer"], "representation": "masked" },
+    { "actors": ["owner"], "when": { "kind": "state", "namespace": "case", "in": ["approved"] }, "representation": "full" }
+  ],
+  "masking": { "strategy": "last_four", "config": { "field": "accountNumber" } },
+  "encryption": { "required": true, "level": "field", "keyScope": "case" }
+}

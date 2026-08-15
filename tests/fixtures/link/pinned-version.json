@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "id": "alink_design_approval",
+  "artifactId": "art_design",
+  "artifactVersionId": "artver_design_1",
+  "subject": {
+    "type": "approval_record",
+    "id": "approval_77"
+  },
+  "role": "accepted_output",
+  "note": "Approval remains attached to version 1.",
+  "createdBy": {
+    "type": "reviewer",
+    "id": "reviewer_2"
+  },
+  "createdAt": "2026-08-14T12:00:00Z"
+}
+

@@ -1,0 +1,8 @@
+{
+  "name": "elqora/artifact-protocol",
+  "description": "PHP binding for the language-neutral Artifact Protocol.",
+  "type": "library",
+  "license": "AGPL-3.0-only",
+  "require": { "php": ">=8.2" },
+  "autoload": { "psr-4": { "Elqora\\Artifact\\": "src/" } }
+}

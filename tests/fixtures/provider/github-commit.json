@@ -1,0 +1,5 @@
+{
+  "type": "provider",
+  "provider": "github",
+  "reference": { "resource": "commit", "repositoryId": 845121, "sha": "0123456789abcdef0123456789abcdef01234567" }
+}

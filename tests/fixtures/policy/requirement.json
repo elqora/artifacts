@@ -1,0 +1,1 @@
+{ "mode": "conditional", "condition": { "kind": "artifact_value", "artifact": "item_unavailable", "operator": "eq", "value": true }, "blocks": ["close_case"] }

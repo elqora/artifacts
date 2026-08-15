@@ -1,0 +1,9 @@
+{
+  "artifactFixture": "../artifact/multiple-versions.json",
+  "versionFixtures": [
+    "../version/design-v1.json",
+    "../version/design-v2.json"
+  ],
+  "followingLinkFixture": "../link/follows-artifact.json",
+  "pinnedLinkFixture": "../link/pinned-version.json"
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/policy/presentation-policy.schema.json",
+  "title": "ArtifactPresentationPolicy",
+  "type": "object",
+  "properties": {
+    "label": { "type": "string" },
+    "helpText": { "type": "string" },
+    "order": { "type": "number" },
+    "display": { "type": "string", "minLength": 1 },
+    "config": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": true
+}

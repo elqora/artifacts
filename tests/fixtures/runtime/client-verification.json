@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0",
+  "id": "ver_delivery_1",
+  "artifactId": "art_delivery_1",
+  "artifactVersionId": "artver_delivery_1",
+  "submissionId": "sub_delivery_1",
+  "status": "verified",
+  "method": "client_confirmation",
+  "verifiedBy": { "type": "client", "id": "client_18" },
+  "createdAt": "2026-08-15T09:16:00Z",
+  "verifiedAt": "2026-08-15T09:20:00Z"
+}

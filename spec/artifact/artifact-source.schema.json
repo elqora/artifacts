@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/artifact/artifact-source.schema.json",
+  "title": "ArtifactSource",
+  "oneOf": [
+    { "$ref": "#/$defs/inline" },
+    { "$ref": "#/$defs/local" },
+    { "$ref": "#/$defs/object" },
+    { "$ref": "#/$defs/url" },
+    { "$ref": "#/$defs/hosted" },
+    { "$ref": "#/$defs/provider" }
+  ],
+  "$defs": {
+    "inline": {
+      "title": "InlineArtifactSource",
+      "type": "object",
+      "required": ["type", "value"],
+      "properties": {
+        "type": { "const": "inline" },
+        "value": {},
+        "mediaType": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "local": {
+      "title": "LocalArtifactSource",
+      "type": "object",
+      "required": ["type", "localId", "syncState"],
+      "properties": {
+        "type": { "const": "local" },
+        "localId": { "type": "string", "minLength": 1 },
+        "filename": { "type": "string" },
+        "mediaType": { "type": "string", "minLength": 1 },
+        "size": { "type": "integer", "minimum": 0 },
+        "syncState": {
+          "type": "string",
+          "enum": ["local_only", "pending_upload", "uploading", "uploaded", "failed"]
+        },
+        "remoteVersionId": {
+          "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactVersionId"
+        }
+      },
+      "additionalProperties": true
+    },
+    "object": {
+      "title": "ObjectArtifactSource",
+      "type": "object",
+      "required": ["type", "objectId"],
+      "properties": {
+        "type": { "const": "object" },
+        "objectId": { "type": "string", "minLength": 1 },
+        "filename": { "type": "string" },
+        "mediaType": { "type": "string", "minLength": 1 },
+        "size": { "type": "integer", "minimum": 0 },
+        "storageProvider": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "url": {
+      "title": "UrlArtifactSource",
+      "type": "object",
+      "required": ["type", "url"],
+      "properties": {
+        "type": { "const": "url" },
+        "url": { "type": "string", "format": "uri" },
+        "provider": { "type": "string", "minLength": 1 },
+        "mediaType": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "hosted": {
+      "title": "HostedArtifactSource",
+      "type": "object",
+      "required": ["type", "recordType", "recordId"],
+      "properties": {
+        "type": { "const": "hosted" },
+        "recordType": { "type": "string", "minLength": 1 },
+        "recordId": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "provider": {
+      "title": "ProviderArtifactSource",
+      "type": "object",
+      "required": ["type", "provider", "reference"],
+      "properties": {
+        "type": { "const": "provider" },
+        "provider": { "type": "string", "minLength": 1 },
+        "reference": {}
+      },
+      "additionalProperties": true
+    }
+  }
+}
+

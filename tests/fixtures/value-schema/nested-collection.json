@@ -1,0 +1,11 @@
+{
+  "valueType": "collection",
+  "minItems": 1,
+  "maxItems": 5,
+  "uniqueItems": true,
+  "itemSchema": {
+    "valueType": "collection",
+    "itemSchema": { "valueType": "text", "minLength": 1, "maxLength": 200 },
+    "minItems": 1
+  }
+}

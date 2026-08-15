@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0",
+  "id": "artspec_delivery_evidence",
+  "key": "delivery_evidence",
+  "name": "Delivery evidence",
+  "description": "Photographic evidence that delivery was completed.",
+  "version": 3,
+  "kind": "delivery_evidence",
+  "valueType": "image",
+  "config": {
+    "valueType": "image",
+    "minFiles": 1,
+    "maxFiles": 4,
+    "acceptedMimeTypes": ["image/jpeg", "image/png"],
+    "maxSizeBytes": 10000000,
+    "requireTimestamp": true,
+    "requireLocation": true
+  },
+  "provider": { "actors": ["runner"], "mode": "single" },
+  "requirement": { "mode": "required", "blocks": ["submit_completion"] },
+  "lifecycle": { "createAt": "accepted", "editableDuring": ["accepted", "in_progress"], "submitDuring": ["in_progress"], "lockAt": "completion_submitted" },
+  "access": {
+    "read": [
+      { "actors": ["runner", "platform", "admin"] },
+      { "actors": ["client"], "condition": { "kind": "state", "namespace": "errand", "in": ["completion_submitted", "under_review", "completed"] } }
+    ],
+    "write": [{ "actors": ["runner"], "condition": { "kind": "state", "namespace": "errand", "in": ["in_progress"] } }]
+  },
+  "privacy": {
+    "classification": "private",
+    "reveal": [{ "actors": ["client"], "representation": "full", "when": { "kind": "artifact_exists", "artifact": "completion" } }],
+    "masking": { "strategy": "redact", "config": { "fields": ["metadata.device"] } },
+    "encryption": { "required": true, "level": "content", "keyScope": "errand" }
+  },
+  "validation": { "mode": "strict", "rules": [{ "type": "file_count", "config": { "min": 1, "max": 4 } }] },
+  "verification": { "required": true, "methods": ["client_confirmation", "platform_review"], "actors": ["client", "platform"] },
+  "retention": { "policy": "duration", "days": 365 },
+  "presentation": { "label": "Delivery photos", "order": 10, "display": "gallery" }
+}

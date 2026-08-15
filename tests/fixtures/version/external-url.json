@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "id": "artver_demo_1",
+  "artifactId": "art_demo",
+  "version": 1,
+  "source": {
+    "type": "url",
+    "url": "https://media.example.test/demos/authentication",
+    "provider": "example_video",
+    "mediaType": "text/html"
+  },
+  "createdBy": {
+    "type": "developer",
+    "id": "developer_9"
+  },
+  "createdAt": "2026-08-15T11:00:00Z"
+}
+

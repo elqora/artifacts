@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "id": "alink_design_current",
+  "artifactId": "art_design",
+  "subject": {
+    "type": "work_item",
+    "id": "work_12",
+    "scope": {
+      "tenant": "tenant_alpha"
+    }
+  },
+  "role": "reference_material",
+  "createdBy": {
+    "type": "member",
+    "id": "actor_42"
+  },
+  "createdAt": "2026-08-15T08:05:00Z"
+}
+

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/artifact/artifact-version.schema.json",
+  "title": "ArtifactVersion",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "artifactId",
+    "version",
+    "source",
+    "createdBy",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/schemaVersion"
+    },
+    "id": {
+      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactVersionId"
+    },
+    "artifactId": {
+      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactId"
+    },
+    "version": { "type": "integer", "minimum": 1 },
+    "source": {
+      "$ref": "https://artifact-sdk.dev/schema/1.0/artifact/artifact-source.schema.json"
+    },
+    "integrity": {
+      "$ref": "https://artifact-sdk.dev/schema/1.0/artifact/artifact-integrity.schema.json"
+    },
+    "createdBy": {
+      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/actorReference"
+    },
+    "createdAt": {
+      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/timestamp"
+    },
+    "note": { "type": "string" },
+    "metadata": {
+      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactMetadata"
+    }
+  },
+  "additionalProperties": true
+}
+

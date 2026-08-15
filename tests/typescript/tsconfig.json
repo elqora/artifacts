@@ -1,0 +1,12 @@
+{
+  "extends": "../../packages/typescript/tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "../.."
+  },
+  "include": [
+    "./**/*.ts",
+    "../../packages/typescript/src/**/*.ts"
+  ]
+}
+

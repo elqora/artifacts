@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0",
+  "id": "artver_offline_scan_1",
+  "artifactId": "art_offline_scan",
+  "version": 1,
+  "source": {
+    "type": "local",
+    "localId": "device-file-882",
+    "filename": "scan.pdf",
+    "mediaType": "application/pdf",
+    "size": 80421,
+    "syncState": "pending_upload"
+  },
+  "createdBy": {
+    "type": "offline_device",
+    "id": "device_5"
+  },
+  "createdAt": "2026-08-15T07:10:00Z"
+}
+

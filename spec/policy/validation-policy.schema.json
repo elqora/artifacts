@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/policy/validation-policy.schema.json",
+  "title": "ArtifactValidationPolicy",
+  "type": "object",
+  "properties": {
+    "mode": { "enum": ["strict", "lenient"] },
+    "rules": { "type": "array", "items": { "$ref": "#/$defs/rule" } }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "rule": {
+      "title": "ArtifactValidationRule",
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "minLength": 1 },
+        "config": { "type": "object", "additionalProperties": true }
+      },
+      "additionalProperties": true
+    }
+  }
+}

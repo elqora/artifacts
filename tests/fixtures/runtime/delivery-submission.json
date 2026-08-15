@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0",
+  "id": "sub_delivery_1",
+  "artifactId": "art_delivery_1",
+  "artifactVersionId": "artver_delivery_1",
+  "submittedBy": { "type": "runner", "id": "runner_28" },
+  "submittedAt": "2026-08-15T09:15:00Z",
+  "context": { "latitude": 6.5244, "longitude": 3.3792, "deviceId": "device_7", "ipAddress": "203.0.113.7", "userAgent": "ArtifactHost/1" },
+  "metadata": { "offlineCapture": false }
+}

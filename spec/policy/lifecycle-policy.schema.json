@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/policy/lifecycle-policy.schema.json",
+  "title": "ArtifactLifecyclePolicy",
+  "type": "object",
+  "properties": {
+    "createAt": { "type": "string", "minLength": 1 },
+    "editableDuring": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "submitDuring": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "lockAt": { "type": "string", "minLength": 1 },
+    "invalidateOn": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "condition": { "$ref": "https://artifact-sdk.dev/schema/1.0/policy/condition.schema.json" }
+  },
+  "additionalProperties": true
+}

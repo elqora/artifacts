@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "id": "artver_design_2",
+  "artifactId": "art_design",
+  "version": 2,
+  "source": {
+    "type": "object",
+    "objectId": "obj_design_2",
+    "filename": "homepage-v2.fig",
+    "mediaType": "application/octet-stream"
+  },
+  "createdBy": {
+    "type": "designer",
+    "id": "designer_3"
+  },
+  "createdAt": "2026-08-15T08:00:00Z",
+  "note": "Incorporates review feedback."
+}
+

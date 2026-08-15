@@ -1,0 +1,23 @@
+{
+  "name": "@elqora/artifact-sdk-repository",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "tsc -p packages/typescript/tsconfig.json && tsc -p extensions/github/typescript/tsconfig.json",
+    "generate": "node generators/generate-bindings.mjs",
+    "check:generated": "node generators/generate-bindings.mjs --check",
+    "typecheck": "tsc -p packages/typescript/tsconfig.json --noEmit && tsc -p extensions/github/typescript/tsconfig.json --noEmit && tsc -p tests/typescript/tsconfig.json --noEmit",
+    "test:php": "php tests/php/conformance.php",
+    "test:conformance": "node --test tests/conformance/*.test.mjs",
+    "test": "npm run check:generated && npm run typecheck && npm run build && npm run test:conformance && npm run test:php"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "3.0.1",
+    "typescript": "5.9.2"
+  }
+}

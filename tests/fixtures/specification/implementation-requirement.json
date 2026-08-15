@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0",
+  "id": "req_auth_impl",
+  "key": "authentication_implementation",
+  "allowedKinds": ["implementation"],
+  "allowedValueTypes": ["reference", "link"],
+  "minimumCount": 1,
+  "maximumCount": 3,
+  "required": true,
+  "specId": "artspec_auth_impl"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "elqora/artifact-github",
+  "description": "Typed GitHub provider references for the Artifact Protocol; no API client.",
+  "type": "library",
+  "license": "AGPL-3.0-only",
+  "require": { "php": ">=8.2" },
+  "autoload": { "psr-4": { "Elqora\\Artifact\\GitHub\\": "./" } }
+}

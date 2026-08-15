@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/artifact/artifact-integrity.schema.json",
+  "title": "ArtifactIntegrity",
+  "type": "object",
+  "required": ["algorithm", "hash"],
+  "properties": {
+    "algorithm": {
+      "type": "string",
+      "enum": ["sha256", "sha384", "sha512"]
+    },
+    "hash": {
+      "type": "string",
+      "description": "The lowercase hexadecimal digest produced by the selected algorithm."
+    },
+    "size": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "verifiedAt": {
+      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/timestamp"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "algorithm": { "const": "sha256" } },
+        "required": ["algorithm"]
+      },
+      "then": {
+        "properties": {
+          "hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "algorithm": { "const": "sha384" } },
+        "required": ["algorithm"]
+      },
+      "then": {
+        "properties": {
+          "hash": { "type": "string", "pattern": "^[0-9a-f]{96}$" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "algorithm": { "const": "sha512" } },
+        "required": ["algorithm"]
+      },
+      "then": {
+        "properties": {
+          "hash": { "type": "string", "pattern": "^[0-9a-f]{128}$" }
+        }
+      }
+    }
+  ],
+  "additionalProperties": true
+}

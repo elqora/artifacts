@@ -1,0 +1,1 @@
+{ "type": "provider", "provider": "github", "reference": { "resource": "deployment", "repositoryId": 845121, "deploymentId": 771 } }

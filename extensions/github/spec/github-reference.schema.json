@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/extensions/github/github-reference.schema.json",
+  "title": "GitHubArtifactReference",
+  "oneOf": [
+    { "$ref": "#/$defs/pullRequest" }, { "$ref": "#/$defs/commit" },
+    { "$ref": "#/$defs/issue" }, { "$ref": "#/$defs/discussion" },
+    { "$ref": "#/$defs/deployment" }, { "$ref": "#/$defs/workflowRun" },
+    { "$ref": "#/$defs/checkRun" }
+  ],
+  "$defs": {
+    "numbered": {
+      "type": "object", "required": ["repositoryId", "number"],
+      "properties": { "repositoryId": { "type": "integer", "minimum": 1 }, "number": { "type": "integer", "minimum": 1 }, "nodeId": { "type": "string", "minLength": 1 } },
+      "additionalProperties": true
+    },
+    "pullRequest": { "allOf": [{ "$ref": "#/$defs/numbered" }, { "type": "object", "required": ["resource"], "properties": { "resource": { "const": "pull_request" } }, "additionalProperties": true }] },
+    "issue": { "allOf": [{ "$ref": "#/$defs/numbered" }, { "type": "object", "required": ["resource"], "properties": { "resource": { "const": "issue" } }, "additionalProperties": true }] },
+    "discussion": { "allOf": [{ "$ref": "#/$defs/numbered" }, { "type": "object", "required": ["resource"], "properties": { "resource": { "const": "discussion" } }, "additionalProperties": true }] },
+    "commit": { "type": "object", "required": ["resource", "repositoryId", "sha"], "properties": { "resource": { "const": "commit" }, "repositoryId": { "type": "integer", "minimum": 1 }, "sha": { "type": "string", "pattern": "^[0-9a-fA-F]{40,64}$" } }, "additionalProperties": true },
+    "deployment": { "type": "object", "required": ["resource", "repositoryId", "deploymentId"], "properties": { "resource": { "const": "deployment" }, "repositoryId": { "type": "integer", "minimum": 1 }, "deploymentId": { "type": "integer", "minimum": 1 } }, "additionalProperties": true },
+    "workflowRun": { "type": "object", "required": ["resource", "repositoryId", "runId"], "properties": { "resource": { "const": "workflow_run" }, "repositoryId": { "type": "integer", "minimum": 1 }, "runId": { "type": "integer", "minimum": 1 } }, "additionalProperties": true },
+    "checkRun": { "type": "object", "required": ["resource", "repositoryId", "checkRunId"], "properties": { "resource": { "const": "check_run" }, "repositoryId": { "type": "integer", "minimum": 1 }, "checkRunId": { "type": "integer", "minimum": 1 } }, "additionalProperties": true }
+  }
+}

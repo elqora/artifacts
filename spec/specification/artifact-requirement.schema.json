@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/specification/artifact-requirement.schema.json",
+  "title": "ArtifactRequirement",
+  "type": "object",
+  "required": ["schemaVersion", "id", "required"],
+  "properties": {
+    "schemaVersion": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/schemaVersion" },
+    "id": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactRequirementId" },
+    "key": { "type": "string", "minLength": 1 },
+    "allowedKinds": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "allowedValueTypes": { "type": "array", "items": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactValueType" } },
+    "minimumCount": { "type": "integer", "minimum": 0 },
+    "maximumCount": { "type": "integer", "minimum": 0 },
+    "required": { "type": "boolean" },
+    "specId": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactSpecId" },
+    "metadata": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactMetadata" }
+  },
+  "additionalProperties": true
+}

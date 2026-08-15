@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/policy/condition.schema.json",
+  "title": "ArtifactCondition",
+  "description": "A language-neutral recursive condition AST. Resolution of host identifiers is host-defined.",
+  "$ref": "#/$defs/condition",
+  "$defs": {
+    "condition": {
+      "oneOf": [
+        { "$ref": "#/$defs/state" },
+        { "$ref": "#/$defs/actor" },
+        { "$ref": "#/$defs/artifactExists" },
+        { "$ref": "#/$defs/artifactValue" },
+        { "$ref": "#/$defs/and" },
+        { "$ref": "#/$defs/or" },
+        { "$ref": "#/$defs/not" }
+      ]
+    },
+    "state": {
+      "type": "object",
+      "required": ["kind", "namespace", "in"],
+      "properties": {
+        "kind": { "const": "state" },
+        "namespace": { "type": "string", "minLength": 1 },
+        "in": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": true
+    },
+    "actor": {
+      "type": "object",
+      "required": ["kind", "in"],
+      "properties": {
+        "kind": { "const": "actor" },
+        "in": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": true
+    },
+    "artifactExists": {
+      "type": "object",
+      "required": ["kind", "artifact"],
+      "properties": {
+        "kind": { "const": "artifact_exists" },
+        "artifact": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "artifactValue": {
+      "type": "object",
+      "required": ["kind", "artifact", "operator", "value"],
+      "properties": {
+        "kind": { "const": "artifact_value" },
+        "artifact": { "type": "string", "minLength": 1 },
+        "operator": { "enum": ["eq", "neq", "gt", "gte", "lt", "lte", "contains", "in"] },
+        "value": {}
+      },
+      "additionalProperties": true
+    },
+    "and": {
+      "type": "object",
+      "required": ["kind", "conditions"],
+      "properties": {
+        "kind": { "const": "and" },
+        "conditions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/condition" } }
+      },
+      "additionalProperties": true
+    },
+    "or": {
+      "type": "object",
+      "required": ["kind", "conditions"],
+      "properties": {
+        "kind": { "const": "or" },
+        "conditions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/condition" } }
+      },
+      "additionalProperties": true
+    },
+    "not": {
+      "type": "object",
+      "required": ["kind", "condition"],
+      "properties": {
+        "kind": { "const": "not" },
+        "condition": { "$ref": "#/$defs/condition" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

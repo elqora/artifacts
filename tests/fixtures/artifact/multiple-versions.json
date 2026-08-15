@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "id": "art_design",
+  "kind": "design_mockup",
+  "valueType": "file",
+  "title": "Homepage design",
+  "currentVersionId": "artver_design_2",
+  "createdBy": {
+    "type": "designer",
+    "id": "designer_3"
+  },
+  "createdAt": "2026-08-14T08:00:00Z",
+  "updatedAt": "2026-08-15T08:00:00Z"
+}
+

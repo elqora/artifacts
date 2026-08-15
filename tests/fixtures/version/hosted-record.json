@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0",
+  "id": "artver_report_1",
+  "artifactId": "art_report",
+  "version": 1,
+  "source": {
+    "type": "hosted",
+    "recordType": "generated_report",
+    "recordId": "report_983"
+  },
+  "createdBy": {
+    "type": "system"
+  },
+  "createdAt": "2026-08-15T12:00:00Z"
+}
+

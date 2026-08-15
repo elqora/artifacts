@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/runtime/verification.schema.json",
+  "title": "ArtifactVerification",
+  "type": "object",
+  "required": ["schemaVersion", "id", "artifactId", "status", "createdAt"],
+  "properties": {
+    "schemaVersion": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/schemaVersion" },
+    "id": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactVerificationId" },
+    "artifactId": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactId" },
+    "artifactVersionId": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactVersionId" },
+    "submissionId": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactSubmissionId" },
+    "status": { "enum": ["pending", "verified", "rejected", "waived"] },
+    "method": { "type": "string", "minLength": 1 },
+    "verifiedBy": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/actorReference" },
+    "reason": { "type": "string" },
+    "createdAt": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/timestamp" },
+    "verifiedAt": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/timestamp" },
+    "metadata": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactMetadata" }
+  },
+  "additionalProperties": true
+}

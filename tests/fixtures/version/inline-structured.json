@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "id": "artver_receipt_1",
+  "artifactId": "art_receipt",
+  "version": 1,
+  "source": {
+    "type": "inline",
+    "value": {
+      "merchant": "Example Store",
+      "amount": 12500,
+      "currency": "NGN",
+      "transactionReference": "TX-1289"
+    },
+    "mediaType": "application/json"
+  },
+  "createdBy": {
+    "type": "member",
+    "id": "actor_42"
+  },
+  "createdAt": "2026-08-15T09:15:00Z"
+}
+

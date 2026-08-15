@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.0/runtime/submission.schema.json",
+  "title": "ArtifactSubmission",
+  "type": "object",
+  "required": ["schemaVersion", "id", "artifactId", "submittedBy", "submittedAt"],
+  "properties": {
+    "schemaVersion": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/schemaVersion" },
+    "id": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactSubmissionId" },
+    "artifactId": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactId" },
+    "artifactVersionId": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactVersionId" },
+    "submittedBy": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/actorReference" },
+    "value": {},
+    "submittedAt": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/timestamp" },
+    "context": { "$ref": "#/$defs/context" },
+    "metadata": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactMetadata" }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "context": {
+      "title": "ArtifactSubmissionContext",
+      "type": "object",
+      "properties": {
+        "latitude": { "type": "number", "minimum": -90, "maximum": 90 },
+        "longitude": { "type": "number", "minimum": -180, "maximum": 180 },
+        "deviceId": { "type": "string", "minLength": 1 },
+        "ipAddress": { "type": "string", "anyOf": [{ "format": "ipv4" }, { "format": "ipv6" }] },
+        "userAgent": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

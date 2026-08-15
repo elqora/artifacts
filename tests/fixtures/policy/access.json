@@ -1,0 +1,6 @@
+{
+  "read": [{ "actors": ["owner", "admin"] }],
+  "write": [{ "actors": ["owner"], "condition": { "kind": "state", "namespace": "case", "in": ["draft"] } }],
+  "submit": [{ "actors": ["owner"] }],
+  "verify": [{ "actors": ["reviewer"] }]
+}

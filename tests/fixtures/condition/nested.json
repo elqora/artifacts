@@ -1,0 +1,14 @@
+{
+  "kind": "and",
+  "conditions": [
+    { "kind": "state", "namespace": "workflow", "in": ["active", "changes_requested"] },
+    {
+      "kind": "or",
+      "conditions": [
+        { "kind": "actor", "in": ["developer", "admin"] },
+        { "kind": "not", "condition": { "kind": "artifact_exists", "artifact": "waiver" } }
+      ]
+    },
+    { "kind": "artifact_value", "artifact": "risk_score", "operator": "lte", "value": 5 }
+  ]
+}

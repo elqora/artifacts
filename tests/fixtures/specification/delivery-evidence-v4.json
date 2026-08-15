@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0",
+  "id": "artspec_delivery_evidence",
+  "key": "delivery_evidence",
+  "name": "Delivery evidence",
+  "version": 4,
+  "kind": "delivery_evidence",
+  "valueType": "image",
+  "config": { "minFiles": 3, "maxFiles": 5, "requireTimestamp": true, "requireLocation": true },
+  "requirement": { "mode": "required", "blocks": ["submit_completion"] },
+  "retention": { "policy": "duration", "days": 365 }
+}

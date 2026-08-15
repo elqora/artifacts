@@ -1,0 +1,1 @@
+{ "mode": "strict", "rules": [{ "type": "mime_type", "config": { "allowed": ["image/jpeg", "image/png"] } }] }
