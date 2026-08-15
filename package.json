@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "tsc -p packages/typescript/tsconfig.json && tsc -p extensions/github/typescript/tsconfig.json",
+    "build": "npm run build --workspace @elqora/artifacts && tsc -p extensions/github/typescript/tsconfig.json",
     "generate": "node generators/generate-bindings.mjs",
     "check:generated": "node generators/generate-bindings.mjs --check",
     "typecheck": "tsc -p packages/typescript/tsconfig.json --noEmit && tsc -p extensions/github/typescript/tsconfig.json --noEmit && tsc -p tests/typescript/tsconfig.json --noEmit",
@@ -15,9 +15,10 @@
     "test:phpstan": "php packages/php/vendor/bin/phpstan analyse --configuration=packages/php/phpstan.neon",
     "test:go": "node scripts/run-go-checks.mjs",
     "test:packages": "node scripts/validate-packages.mjs",
+    "test:typescript-package": "node scripts/test-typescript-package.mjs",
     "test:conformance": "node --test tests/conformance/*.test.mjs",
     "test:generator": "node --test tests/generator/*.test.mjs",
-    "test": "npm run check:generated && npm run test:generator && npm run typecheck && npm run build && npm run test:conformance && npm run test:php && npm run test:phpstan && npm run test:go && npm run test:packages"
+    "test": "npm run check:generated && npm run test:generator && npm run typecheck && npm run build && npm run test:conformance && npm run test:typescript-package && npm run test:php && npm run test:phpstan && npm run test:go && npm run test:packages"
   },
   "devDependencies": {
     "ajv": "^8.20.0",

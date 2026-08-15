@@ -21,9 +21,9 @@ const phpFiles = (directory) => readdirSync(path.join(root, directory), { recurs
 for (const file of [...phpFiles("packages/php/src"), ...phpFiles("extensions/github/php")]) run("php", ["-l", file], { quiet: true });
 run("composer", ["validate", "--strict", "packages/php/composer.json"]);
 run("composer", ["validate", "--strict", "extensions/github/php/composer.json"]);
-const corePack = JSON.parse(run("npm", ["pack", "--dry-run", "--json", "--workspace", "@elqora/artifact-protocol"], { quiet: true }));
+const corePack = JSON.parse(run("npm", ["pack", "--dry-run", "--json", "--workspace", "@elqora/artifacts"], { quiet: true }));
 const githubPack = JSON.parse(run("npm", ["pack", "--dry-run", "--json"], { quiet: true, cwd: path.join(root, "extensions", "github", "typescript") }));
-if (corePack[0]?.name !== "@elqora/artifact-protocol" || githubPack[0]?.name !== "@elqora/artifact-github") {
+if (corePack[0]?.name !== "@elqora/artifacts" || githubPack[0]?.name !== "@elqora/artifact-github") {
   throw new Error("TypeScript package dry run produced an unexpected package identity.");
 }
 process.stdout.write(`Package validation passed: ${corePack[0].name}, ${githubPack[0].name}.\n`);

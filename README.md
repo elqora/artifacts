@@ -34,9 +34,25 @@ The canonical schemas implement Artifact Protocol `1.0` using JSON Schema
 Draft 2020-12. Run `npm run check:generated` to prove generated binding
 vocabularies match those schemas.
 
+## TypeScript package
+
+The release-ready TypeScript SDK is `@elqora/artifacts`:
+
+```sh
+npm install @elqora/artifacts
+```
+
+```ts
+import type { Artifact, ArtifactSpec, ArtifactVersion } from "@elqora/artifacts";
+```
+
+It is an ESM-only package for Node.js 20 and newer. The package has not yet
+been published; `npm run test:typescript-package` builds a tarball, installs it
+in a clean temporary project, and verifies both its type and runtime exports.
+
 `npm test` validates deterministic generation, TypeScript, every JSON Schema
 fixture, generated PHP DTOs and static analysis, both Go modules, package
-manifests, and package contents.
+manifests, package contents, and clean installation of `@elqora/artifacts`.
 
 Start with [architecture](./docs/architecture.md),
 [terminology](./docs/terminology.md), and

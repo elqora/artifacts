@@ -1,11 +1,16 @@
 {
-  "name": "@elqora/artifact-protocol",
+  "name": "@elqora/artifacts",
   "version": "0.1.0",
-  "description": "TypeScript reference binding for the language-neutral Artifact Protocol.",
+  "description": "TypeScript SDK for the language-neutral Elqora Artifact Protocol.",
   "type": "module",
   "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "exports": {
     ".": {
@@ -14,6 +19,28 @@
     }
   },
   "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node ../../scripts/embed-declaration-sources.mjs",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elqora/artifacts.git",
+    "directory": "packages/typescript"
+  },
+  "homepage": "https://github.com/elqora/artifacts#readme",
+  "bugs": {
+    "url": "https://github.com/elqora/artifacts/issues"
+  },
+  "keywords": [
+    "artifact",
+    "protocol",
+    "sdk",
+    "typescript",
+    "json-schema"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "AGPL-3.0-only"
 }
-
