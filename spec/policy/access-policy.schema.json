@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://artifact-sdk.dev/schema/1.0/policy/access-policy.schema.json",
+  "$id": "https://artifact-sdk.dev/schema/1.1/policy/access-policy.schema.json",
   "title": "ArtifactAccessPolicy",
   "type": "object",
   "properties": {
@@ -17,7 +17,7 @@
       "required": ["actors"],
       "properties": {
         "actors": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
-        "condition": { "$ref": "https://artifact-sdk.dev/schema/1.0/policy/condition.schema.json" }
+        "condition": { "$ref": "https://artifact-sdk.dev/schema/1.1/policy/condition.schema.json" }
       },
       "additionalProperties": true
     }

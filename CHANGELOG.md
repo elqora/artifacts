@@ -10,6 +10,8 @@ explicitly.
 
 ### Added
 
+- Artifact Protocol 1.1 and `ArtifactSpecification`, a schema-identified
+  semantic interpretation envelope for artifacts and immutable versions.
 - Canonical JSON Schemas for the Artifact Protocol and GitHub extension.
 - Generated TypeScript wire contracts and vocabulary constants.
 - Ergonomic TypeScript contracts for artifacts, versions, sources, links,

@@ -87,6 +87,17 @@ final readonly class ArtifactVersion
         return array_key_exists('integrity', $this->data);
     }
 
+    /** @return array<mixed>|null */
+    public function specification(): ?array
+    {
+        return $this->data['specification'] ?? null;
+    }
+
+    public function hasSpecification(): bool
+    {
+        return array_key_exists('specification', $this->data);
+    }
+
     /** @return array<mixed> */
     public function createdBy(): array
     {
@@ -132,7 +143,7 @@ final readonly class ArtifactVersion
     /** @return array<string, mixed> */
     public function unknownFields(): array
     {
-        return array_diff_key($this->data, ['schemaVersion' => true, 'id' => true, 'artifactId' => true, 'version' => true, 'source' => true, 'integrity' => true, 'createdBy' => true, 'createdAt' => true, 'note' => true, 'metadata' => true]);
+        return array_diff_key($this->data, ['schemaVersion' => true, 'id' => true, 'artifactId' => true, 'version' => true, 'source' => true, 'integrity' => true, 'specification' => true, 'createdBy' => true, 'createdAt' => true, 'note' => true, 'metadata' => true]);
     }
 
     /** @return array<string, mixed> */

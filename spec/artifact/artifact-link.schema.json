@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://artifact-sdk.dev/schema/1.0/artifact/artifact-link.schema.json",
+  "$id": "https://artifact-sdk.dev/schema/1.1/artifact/artifact-link.schema.json",
   "title": "ArtifactLink",
   "type": "object",
   "required": [
@@ -14,30 +14,30 @@
   ],
   "properties": {
     "schemaVersion": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/schemaVersion"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/schemaVersion"
     },
     "id": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactLinkId"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/artifactLinkId"
     },
     "artifactId": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactId"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/artifactId"
     },
     "artifactVersionId": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactVersionId"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/artifactVersionId"
     },
     "subject": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactSubjectReference"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/artifactSubjectReference"
     },
     "role": { "type": "string", "minLength": 1 },
     "note": { "type": "string" },
     "createdBy": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/actorReference"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/actorReference"
     },
     "createdAt": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/timestamp"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/timestamp"
     },
     "metadata": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactMetadata"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/artifactMetadata"
     }
   },
   "additionalProperties": true

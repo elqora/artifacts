@@ -1,9 +1,16 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "id": "art_site_photo",
   "kind": "site_observation",
   "valueType": "image",
   "title": "Site photograph",
+  "specification": {
+    "schema": "image-subject",
+    "version": 1,
+    "value": {
+      "subject": "Loading-bay condition"
+    }
+  },
   "currentVersionId": "artver_site_photo_1",
   "createdBy": {
     "type": "field_agent",
@@ -12,4 +19,3 @@
   "createdAt": "2026-08-15T10:00:00Z",
   "updatedAt": "2026-08-15T10:00:00Z"
 }
-

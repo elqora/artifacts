@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://artifact-sdk.dev/schema/1.0/artifact/artifact-source.schema.json",
+  "$id": "https://artifact-sdk.dev/schema/1.1/artifact/artifact-source.schema.json",
   "title": "ArtifactSource",
   "oneOf": [
     { "$ref": "#/$defs/inline" },
@@ -37,7 +37,7 @@
           "enum": ["local_only", "pending_upload", "uploading", "uploaded", "failed"]
         },
         "remoteVersionId": {
-          "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactVersionId"
+          "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/artifactVersionId"
         }
       },
       "additionalProperties": true

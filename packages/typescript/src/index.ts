@@ -24,7 +24,7 @@ export {
 };
 
 /** The schema version implemented by this binding. */
-export const ARTIFACT_PROTOCOL_VERSION = "1.0" as const;
+export const ARTIFACT_PROTOCOL_VERSION = "1.1" as const;
 
 export type ArtifactProtocolVersion = typeof ARTIFACT_PROTOCOL_VERSION;
 
@@ -67,16 +67,25 @@ export interface ArtifactSubjectReference<TType extends string = string> {
   scope?: Record<string, string>;
 }
 
+/** Schema-governed semantic interpretation of an artifact or immutable artifact version. */
+export interface ArtifactSpecification<TValue = unknown> extends Omit<Generated.WireArtifactSpecification, "value"> {
+  schema: string;
+  version: number;
+  value: TValue;
+}
+
 export interface Artifact<
   TKind extends string = ArtifactKind,
   TValueType extends ArtifactValueType = ArtifactValueType,
-> extends ArtifactProtocolRecord, Omit<Generated.WireArtifact, "scope" | "kind" | "valueType" | "createdBy" | "metadata"> {
+  TSpecification = unknown,
+> extends ArtifactProtocolRecord, Omit<Generated.WireArtifact, "scope" | "kind" | "valueType" | "specification" | "createdBy" | "metadata"> {
   id: ArtifactId;
   scope?: ArtifactScopeReference;
   kind: TKind;
   valueType: TValueType;
   title?: string;
   description?: string;
+  specification?: ArtifactSpecification<TSpecification>;
   currentVersionId?: ArtifactVersionId;
   createdBy: ActorReference;
   createdAt: string;
@@ -155,12 +164,14 @@ export interface ArtifactIntegrity extends Generated.WireArtifactIntegrity {
 
 export interface ArtifactVersion<
   TSource extends ArtifactSource = ArtifactSource,
-> extends ArtifactProtocolRecord, Omit<Generated.WireArtifactVersion, "source" | "integrity" | "createdBy" | "metadata"> {
+  TSpecification = unknown,
+> extends ArtifactProtocolRecord, Omit<Generated.WireArtifactVersion, "source" | "integrity" | "specification" | "createdBy" | "metadata"> {
   id: ArtifactVersionId;
   artifactId: ArtifactId;
   version: number;
   source: TSource;
   integrity?: ArtifactIntegrity;
+  specification?: ArtifactSpecification<TSpecification>;
   createdBy: ActorReference;
   createdAt: string;
   note?: string;

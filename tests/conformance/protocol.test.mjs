@@ -23,33 +23,35 @@ const fixtureRoot = path.join(repositoryRoot, "tests", "fixtures");
 
 const schemaIds = {
   protocol:
-    "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json",
+    "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json",
   artifact:
-    "https://artifact-sdk.dev/schema/1.0/artifact/artifact.schema.json",
+    "https://artifact-sdk.dev/schema/1.1/artifact/artifact.schema.json",
   version:
-    "https://artifact-sdk.dev/schema/1.0/artifact/artifact-version.schema.json",
+    "https://artifact-sdk.dev/schema/1.1/artifact/artifact-version.schema.json",
   source:
-    "https://artifact-sdk.dev/schema/1.0/artifact/artifact-source.schema.json",
+    "https://artifact-sdk.dev/schema/1.1/artifact/artifact-source.schema.json",
   integrity:
-    "https://artifact-sdk.dev/schema/1.0/artifact/artifact-integrity.schema.json",
-  link: "https://artifact-sdk.dev/schema/1.0/artifact/artifact-link.schema.json",
-  valueSchema: "https://artifact-sdk.dev/schema/1.0/specification/artifact-value-schema.schema.json",
-  spec: "https://artifact-sdk.dev/schema/1.0/specification/artifact-spec.schema.json",
-  snapshot: "https://artifact-sdk.dev/schema/1.0/specification/artifact-spec-snapshot.schema.json",
-  requirement: "https://artifact-sdk.dev/schema/1.0/specification/artifact-requirement.schema.json",
-  condition: "https://artifact-sdk.dev/schema/1.0/policy/condition.schema.json",
-  providerPolicy: "https://artifact-sdk.dev/schema/1.0/policy/provider-policy.schema.json",
-  requirementPolicy: "https://artifact-sdk.dev/schema/1.0/policy/requirement-policy.schema.json",
-  lifecyclePolicy: "https://artifact-sdk.dev/schema/1.0/policy/lifecycle-policy.schema.json",
-  accessPolicy: "https://artifact-sdk.dev/schema/1.0/policy/access-policy.schema.json",
-  privacyPolicy: "https://artifact-sdk.dev/schema/1.0/policy/privacy-policy.schema.json",
-  validationPolicy: "https://artifact-sdk.dev/schema/1.0/policy/validation-policy.schema.json",
-  verificationPolicy: "https://artifact-sdk.dev/schema/1.0/policy/verification-policy.schema.json",
-  retentionPolicy: "https://artifact-sdk.dev/schema/1.0/policy/retention-policy.schema.json",
-  presentationPolicy: "https://artifact-sdk.dev/schema/1.0/policy/presentation-policy.schema.json",
-  submission: "https://artifact-sdk.dev/schema/1.0/runtime/submission.schema.json",
-  verification: "https://artifact-sdk.dev/schema/1.0/runtime/verification.schema.json",
-  githubSource: "https://artifact-sdk.dev/schema/1.0/extensions/github/github-source.schema.json",
+    "https://artifact-sdk.dev/schema/1.1/artifact/artifact-integrity.schema.json",
+  artifactSpecification:
+    "https://artifact-sdk.dev/schema/1.1/artifact/artifact-specification.schema.json",
+  link: "https://artifact-sdk.dev/schema/1.1/artifact/artifact-link.schema.json",
+  valueSchema: "https://artifact-sdk.dev/schema/1.1/specification/artifact-value-schema.schema.json",
+  spec: "https://artifact-sdk.dev/schema/1.1/specification/artifact-spec.schema.json",
+  snapshot: "https://artifact-sdk.dev/schema/1.1/specification/artifact-spec-snapshot.schema.json",
+  requirement: "https://artifact-sdk.dev/schema/1.1/specification/artifact-requirement.schema.json",
+  condition: "https://artifact-sdk.dev/schema/1.1/policy/condition.schema.json",
+  providerPolicy: "https://artifact-sdk.dev/schema/1.1/policy/provider-policy.schema.json",
+  requirementPolicy: "https://artifact-sdk.dev/schema/1.1/policy/requirement-policy.schema.json",
+  lifecyclePolicy: "https://artifact-sdk.dev/schema/1.1/policy/lifecycle-policy.schema.json",
+  accessPolicy: "https://artifact-sdk.dev/schema/1.1/policy/access-policy.schema.json",
+  privacyPolicy: "https://artifact-sdk.dev/schema/1.1/policy/privacy-policy.schema.json",
+  validationPolicy: "https://artifact-sdk.dev/schema/1.1/policy/validation-policy.schema.json",
+  verificationPolicy: "https://artifact-sdk.dev/schema/1.1/policy/verification-policy.schema.json",
+  retentionPolicy: "https://artifact-sdk.dev/schema/1.1/policy/retention-policy.schema.json",
+  presentationPolicy: "https://artifact-sdk.dev/schema/1.1/policy/presentation-policy.schema.json",
+  submission: "https://artifact-sdk.dev/schema/1.1/runtime/submission.schema.json",
+  verification: "https://artifact-sdk.dev/schema/1.1/runtime/verification.schema.json",
+  githubSource: "https://artifact-sdk.dev/schema/1.1/extensions/github/github-source.schema.json",
 };
 
 async function findJsonFiles(directory) {
@@ -223,7 +225,7 @@ test("all ArtifactSource discriminators validate with their required fields", ()
 
 test("required fields, versions, timestamps, and null semantics are enforced", () => {
   assertInvalid(validateArtifact, {
-    schemaVersion: "1.0",
+    schemaVersion: "1.1",
     id: "art_1",
     kind: "example",
     valueType: "text",
@@ -231,7 +233,7 @@ test("required fields, versions, timestamps, and null semantics are enforced", (
     updatedAt: "2026-08-15T09:00:00Z",
   });
   assertInvalid(validateArtifact, {
-    schemaVersion: "1.0",
+    schemaVersion: "1.1",
     id: "art_1",
     kind: "example",
     valueType: "text",
@@ -241,7 +243,7 @@ test("required fields, versions, timestamps, and null semantics are enforced", (
     updatedAt: "2026-08-15T09:00:00Z",
   });
   assertInvalid(validateVersion, {
-    schemaVersion: "1.0",
+    schemaVersion: "1.1",
     id: "artver_1",
     artifactId: "art_1",
     version: 0,
@@ -251,9 +253,30 @@ test("required fields, versions, timestamps, and null semantics are enforced", (
   });
 });
 
+test("instance semantic specifications validate their schema envelope and preserve independent scopes", async () => {
+  const artifact = await readJson(path.join(fixtureRoot, "artifact", "versioned-image.json"));
+  const version = await readJson(path.join(fixtureRoot, "version", "uploaded-image.json"));
+  assertValid(validateArtifact, artifact);
+  assertValid(validateVersion, version);
+  assert.equal(artifact.specification.schema, "image-subject");
+  assert.equal(version.specification.schema, "image-region");
+  assert.notDeepEqual(artifact.specification, version.specification);
+
+  const validPayloads = [null, "segment", 42, ["item"], { location: "header" }];
+  for (const value of validPayloads) {
+    assertValid(validators.artifactSpecification, { schema: "host-schema", version: 1, value });
+  }
+  assertValid(validators.artifactSpecification, {
+    schema: "host-schema", version: 1, value: {}, futureEnvelopeField: true,
+  });
+  assertInvalid(validators.artifactSpecification, { schema: "", version: 1, value: {} });
+  assertInvalid(validators.artifactSpecification, { schema: "host-schema", version: 0, value: {} });
+  assertInvalid(validators.artifactSpecification, { schema: "host-schema", version: 1 });
+});
+
 test("closed vocabularies reject unknown values", () => {
   const baseArtifact = {
-    schemaVersion: "1.0",
+    schemaVersion: "1.1",
     id: "art_1",
     kind: "custom_kind",
     valueType: "custom_value_type",
@@ -279,7 +302,7 @@ test("closed vocabularies reject unknown values", () => {
 
 test("host-defined vocabularies and unknown additive properties remain open", () => {
   assertValid(validateArtifact, {
-    schemaVersion: "1.0",
+    schemaVersion: "1.1",
     id: "opaque:ART-1",
     kind: "host_specific_kind",
     valueType: "reference",
@@ -289,7 +312,7 @@ test("host-defined vocabularies and unknown additive properties remain open", ()
     futureProtocolField: { enabled: true },
   });
   assertValid(validateLink, {
-    schemaVersion: "1.0",
+    schemaVersion: "1.1",
     id: "alink_1",
     artifactId: "art_1",
     subject: { type: "host_subject_type", id: "subject_1" },
@@ -350,7 +373,7 @@ test("TypeScript runtime vocabularies match canonical schema vocabularies", () =
   const sourceSchema = validateSource.schema;
   const integritySchema = validateIntegrity.schema;
 
-  assert.equal(ARTIFACT_PROTOCOL_VERSION, "1.0");
+  assert.equal(ARTIFACT_PROTOCOL_VERSION, "1.1");
   assert.deepEqual(
     [...ARTIFACT_VALUE_TYPES],
     protocolSchema.$defs.artifactValueType.enum,

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artifact-sdk.dev/schema/1.1/artifact/artifact-specification.schema.json",
+  "title": "ArtifactSpecification",
+  "description": "Schema-identified semantic interpretation of an artifact or one immutable artifact version.",
+  "type": "object",
+  "required": ["schema", "version", "value"],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A case-sensitive, host- or domain-defined specification schema identifier."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The positive revision number of the identified specification schema."
+    },
+    "value": {
+      "description": "An opaque JSON value validated by the identified specification schema when one is available."
+    }
+  },
+  "additionalProperties": true
+}

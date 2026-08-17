@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://artifact-sdk.dev/schema/1.0/artifact/artifact-integrity.schema.json",
+  "$id": "https://artifact-sdk.dev/schema/1.1/artifact/artifact-integrity.schema.json",
   "title": "ArtifactIntegrity",
   "type": "object",
   "required": ["algorithm", "hash"],
@@ -18,7 +18,7 @@
       "minimum": 0
     },
     "verifiedAt": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/timestamp"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/timestamp"
     }
   },
   "allOf": [

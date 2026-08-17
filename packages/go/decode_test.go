@@ -29,7 +29,7 @@ func TestDecodeRejectsUnknownClosedDiscriminator(t *testing.T) {
 }
 
 func TestGeneratedWireRecordPreservesMissingVersusNull(t *testing.T) {
-	base := `{"schemaVersion":"1.0","id":"sub_1","artifactId":"art_1","submittedBy":{"type":"system"},"submittedAt":"2026-08-15T09:00:00Z"}`
+	base := `{"schemaVersion":"1.1","id":"sub_1","artifactId":"art_1","submittedBy":{"type":"system"},"submittedAt":"2026-08-15T09:00:00Z"}`
 	var missing WireArtifactSubmission; if err := json.Unmarshal([]byte(base), &missing); err != nil { t.Fatal(err) }
 	if missing.Value != nil { t.Fatalf("missing value became present: %s", missing.Value) }
 	withNull := base[:len(base)-1] + `,"value":null}`

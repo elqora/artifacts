@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "id": "artver_site_photo_1",
   "artifactId": "art_site_photo",
   "version": 1,
@@ -16,6 +16,13 @@
     "hash": "0155ca2b68de2f9404959609e36baaedbe8c23fcf451d6a8606e36f4e60a6308",
     "size": 2450933,
     "verifiedAt": "2026-08-15T10:00:02Z"
+  },
+  "specification": {
+    "schema": "image-region",
+    "version": 1,
+    "value": {
+      "regions": [{ "x": 120, "y": 45, "width": 310, "height": 180, "note": "Damaged panel" }]
+    }
   },
   "createdBy": {
     "type": "field_agent",

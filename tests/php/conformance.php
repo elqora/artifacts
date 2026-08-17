@@ -83,7 +83,7 @@ $githubSource = json_decode(file_get_contents($root . '/tests/fixtures/provider/
 $githubReference = Elqora\Artifact\GitHub\DtoFactory::reference($githubSource['reference']);
 if ($githubReference->toArray() !== $githubSource['reference']) throw new RuntimeException('GitHub DTO changed its reference.');
 
-$submissionBase = ['schemaVersion' => '1.0', 'id' => 'sub_presence', 'artifactId' => 'art_1', 'submittedBy' => ['type' => 'system'], 'submittedAt' => '2026-08-15T09:00:00Z'];
+$submissionBase = ['schemaVersion' => '1.1', 'id' => 'sub_presence', 'artifactId' => 'art_1', 'submittedBy' => ['type' => 'system'], 'submittedAt' => '2026-08-15T09:00:00Z'];
 $missingValue = ArtifactSubmission::fromArray($submissionBase);
 $nullValue = ArtifactSubmission::fromArray([...$submissionBase, 'value' => null]);
 if ($missingValue->hasValue() || !$nullValue->hasValue() || $nullValue->value() !== null) {

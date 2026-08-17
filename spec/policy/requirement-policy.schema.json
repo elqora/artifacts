@@ -1,17 +1,17 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://artifact-sdk.dev/schema/1.0/policy/requirement-policy.schema.json",
+  "$id": "https://artifact-sdk.dev/schema/1.1/policy/requirement-policy.schema.json",
   "title": "ArtifactRequirementPolicy",
   "type": "object",
   "required": ["mode"],
   "properties": {
     "mode": { "enum": ["required", "optional", "conditional"] },
-    "condition": { "$ref": "https://artifact-sdk.dev/schema/1.0/policy/condition.schema.json" },
+    "condition": { "$ref": "https://artifact-sdk.dev/schema/1.1/policy/condition.schema.json" },
     "blocks": { "type": "array", "items": { "type": "string", "minLength": 1 } }
   },
   "if": { "properties": { "mode": { "const": "conditional" } }, "required": ["mode"] },
   "then": {
-    "properties": { "condition": { "$ref": "https://artifact-sdk.dev/schema/1.0/policy/condition.schema.json" } },
+    "properties": { "condition": { "$ref": "https://artifact-sdk.dev/schema/1.1/policy/condition.schema.json" } },
     "required": ["condition"]
   },
   "additionalProperties": true

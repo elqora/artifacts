@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://artifact-sdk.dev/schema/1.0/policy/verification-policy.schema.json",
+  "$id": "https://artifact-sdk.dev/schema/1.1/policy/verification-policy.schema.json",
   "title": "ArtifactVerificationPolicy",
   "type": "object",
   "required": ["required"],
@@ -8,7 +8,7 @@
     "required": { "type": "boolean" },
     "methods": { "type": "array", "items": { "type": "string", "minLength": 1 } },
     "actors": { "type": "array", "items": { "type": "string", "minLength": 1 } },
-    "condition": { "$ref": "https://artifact-sdk.dev/schema/1.0/policy/condition.schema.json" }
+    "condition": { "$ref": "https://artifact-sdk.dev/schema/1.1/policy/condition.schema.json" }
   },
   "additionalProperties": true
 }

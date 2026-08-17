@@ -13,6 +13,11 @@ independent.
 `ArtifactSpecSnapshot` is the immutable definition captured for historical
 behavior. `ArtifactRequirement` can declare a need without owning a full spec.
 
+`ArtifactSpecification` is schema-identified semantic data on an actual
+`Artifact` or `ArtifactVersion`. Artifact-level data describes stable logical
+meaning; version-level data describes that immutable content revision. They are
+independent and are never merged or inherited by the protocol.
+
 `ArtifactSubmission` records who submitted what and when. `ArtifactVerification`
 records an auditable outcome. Neither is a boolean field on `Artifact`.
 

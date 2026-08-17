@@ -77,6 +77,13 @@ type WireProviderArtifactSource struct {
 	UnknownFields map[string]json.RawMessage `json:"-"`
 }
 
+type WireArtifactSpecification struct {
+	Schema string `json:"schema"`
+	Version int64 `json:"version"`
+	Value json.RawMessage `json:"value"`
+	UnknownFields map[string]json.RawMessage `json:"-"`
+}
+
 type WireArtifactVersion struct {
 	SchemaVersion WireArtifactProtocolCommonContractsSchemaVersion `json:"schemaVersion"`
 	ID WireArtifactProtocolCommonContractsArtifactVersionID `json:"id"`
@@ -84,6 +91,7 @@ type WireArtifactVersion struct {
 	Version int64 `json:"version"`
 	Source WireArtifactSource `json:"source"`
 	Integrity *WireArtifactIntegrity `json:"integrity,omitempty"`
+	Specification *WireArtifactSpecification `json:"specification,omitempty"`
 	CreatedBy WireArtifactProtocolCommonContractsActorReference `json:"createdBy"`
 	CreatedAt WireArtifactProtocolCommonContractsTimestamp `json:"createdAt"`
 	Note *string `json:"note,omitempty"`
@@ -99,6 +107,7 @@ type WireArtifact struct {
 	ValueType WireArtifactProtocolCommonContractsArtifactValueType `json:"valueType"`
 	Title *string `json:"title,omitempty"`
 	Description *string `json:"description,omitempty"`
+	Specification *WireArtifactSpecification `json:"specification,omitempty"`
 	CurrentVersionID WireArtifactProtocolCommonContractsArtifactVersionID `json:"currentVersionId,omitempty"`
 	CreatedBy WireArtifactProtocolCommonContractsActorReference `json:"createdBy"`
 	CreatedAt WireArtifactProtocolCommonContractsTimestamp `json:"createdAt"`
@@ -755,6 +764,29 @@ func (value WireProviderArtifactSource) MarshalJSON() ([]byte, error) {
 	return json.Marshal(fields)
 }
 
+func (value *WireArtifactSpecification) UnmarshalJSON(data []byte) error {
+	type plain WireArtifactSpecification
+	var decoded plain
+	if err := json.Unmarshal(data, &decoded); err != nil { return err }
+	*value = WireArtifactSpecification(decoded)
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal(data, &fields); err != nil { return err }
+	known := map[string]struct{}{"schema": {}, "version": {}, "value": {}}
+	for key := range known { delete(fields, key) }
+	if len(fields) > 0 { value.UnknownFields = fields }
+	return nil
+}
+
+func (value WireArtifactSpecification) MarshalJSON() ([]byte, error) {
+	type plain WireArtifactSpecification
+	knownBytes, err := json.Marshal(plain(value)); if err != nil { return nil, err }
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal(knownBytes, &fields); err != nil { return nil, err }
+	reserved := map[string]struct{}{"schema": {}, "version": {}, "value": {}}
+	for key, raw := range value.UnknownFields { if _, knownKey := reserved[key]; !knownKey { fields[key] = raw } }
+	return json.Marshal(fields)
+}
+
 func (value *WireArtifactVersion) UnmarshalJSON(data []byte) error {
 	type plain WireArtifactVersion
 	var decoded plain
@@ -762,7 +794,7 @@ func (value *WireArtifactVersion) UnmarshalJSON(data []byte) error {
 	*value = WireArtifactVersion(decoded)
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil { return err }
-	known := map[string]struct{}{"schemaVersion": {}, "id": {}, "artifactId": {}, "version": {}, "source": {}, "integrity": {}, "createdBy": {}, "createdAt": {}, "note": {}, "metadata": {}}
+	known := map[string]struct{}{"schemaVersion": {}, "id": {}, "artifactId": {}, "version": {}, "source": {}, "integrity": {}, "specification": {}, "createdBy": {}, "createdAt": {}, "note": {}, "metadata": {}}
 	for key := range known { delete(fields, key) }
 	if len(fields) > 0 { value.UnknownFields = fields }
 	return nil
@@ -773,7 +805,7 @@ func (value WireArtifactVersion) MarshalJSON() ([]byte, error) {
 	knownBytes, err := json.Marshal(plain(value)); if err != nil { return nil, err }
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(knownBytes, &fields); err != nil { return nil, err }
-	reserved := map[string]struct{}{"schemaVersion": {}, "id": {}, "artifactId": {}, "version": {}, "source": {}, "integrity": {}, "createdBy": {}, "createdAt": {}, "note": {}, "metadata": {}}
+	reserved := map[string]struct{}{"schemaVersion": {}, "id": {}, "artifactId": {}, "version": {}, "source": {}, "integrity": {}, "specification": {}, "createdBy": {}, "createdAt": {}, "note": {}, "metadata": {}}
 	for key, raw := range value.UnknownFields { if _, knownKey := reserved[key]; !knownKey { fields[key] = raw } }
 	return json.Marshal(fields)
 }
@@ -785,7 +817,7 @@ func (value *WireArtifact) UnmarshalJSON(data []byte) error {
 	*value = WireArtifact(decoded)
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil { return err }
-	known := map[string]struct{}{"schemaVersion": {}, "id": {}, "scope": {}, "kind": {}, "valueType": {}, "title": {}, "description": {}, "currentVersionId": {}, "createdBy": {}, "createdAt": {}, "updatedAt": {}, "archivedAt": {}, "metadata": {}}
+	known := map[string]struct{}{"schemaVersion": {}, "id": {}, "scope": {}, "kind": {}, "valueType": {}, "title": {}, "description": {}, "specification": {}, "currentVersionId": {}, "createdBy": {}, "createdAt": {}, "updatedAt": {}, "archivedAt": {}, "metadata": {}}
 	for key := range known { delete(fields, key) }
 	if len(fields) > 0 { value.UnknownFields = fields }
 	return nil
@@ -796,7 +828,7 @@ func (value WireArtifact) MarshalJSON() ([]byte, error) {
 	knownBytes, err := json.Marshal(plain(value)); if err != nil { return nil, err }
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(knownBytes, &fields); err != nil { return nil, err }
-	reserved := map[string]struct{}{"schemaVersion": {}, "id": {}, "scope": {}, "kind": {}, "valueType": {}, "title": {}, "description": {}, "currentVersionId": {}, "createdBy": {}, "createdAt": {}, "updatedAt": {}, "archivedAt": {}, "metadata": {}}
+	reserved := map[string]struct{}{"schemaVersion": {}, "id": {}, "scope": {}, "kind": {}, "valueType": {}, "title": {}, "description": {}, "specification": {}, "currentVersionId": {}, "createdBy": {}, "createdAt": {}, "updatedAt": {}, "archivedAt": {}, "metadata": {}}
 	for key, raw := range value.UnknownFields { if _, knownKey := reserved[key]; !knownKey { fields[key] = raw } }
 	return json.Marshal(fields)
 }

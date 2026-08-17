@@ -184,9 +184,10 @@ This is also important for offline-first environments, where objects may need ID
 
 6. Protocol Versioning
 
-Protocol versioning must be distinguished from artifact versions and artifact-specification versions.
+Protocol versioning must be distinguished from artifact-definition, artifact-content,
+and instance-semantic-specification versions.
 
-These represent three separate concepts.
+These represent four separate concepts.
 
 Protocol Version
     = version of the Artifact SDK/schema itself
@@ -197,6 +198,9 @@ ArtifactSpec Version
 ArtifactVersion
     = revision of the actual artifact content
 
+ArtifactSpecification Version
+    = revision of the schema that interprets instance semantic data
+
 A base protocol record may eventually expose:
 
 export interface ArtifactProtocolRecord {
@@ -206,12 +210,13 @@ export interface ArtifactProtocolRecord {
 Example:
 
 {
-  schemaVersion: "1.0"
+  schemaVersion: "1.1"
 }
 
 Changing an artifact's content must not alter the protocol version.
 
-Changing an artifact specification must not alter the protocol version.
+Changing an artifact definition or instance semantic specification must not alter
+the protocol version.
 
 ---
 
@@ -402,7 +407,8 @@ It should not directly contain provider-specific content.
 
 export interface Artifact<
   TKind extends string = string,
-  TValueType extends string = ArtifactValueType
+  TValueType extends string = ArtifactValueType,
+  TSpecification = unknown
 > {
   id: ArtifactId;
 
@@ -415,6 +421,8 @@ export interface Artifact<
   title?: string;
 
   description?: string;
+
+  specification?: ArtifactSpecification<TSpecification>;
 
   currentVersionId?: ArtifactVersionId;
 
@@ -436,6 +444,17 @@ Example:
 Authentication demonstration
 
 The physical MP4, YouTube link, or provider reference is represented by an "ArtifactVersion".
+
+`ArtifactSpecification` is schema-identified semantic interpretation data for
+an actual artifact. It is distinct from `ArtifactSpec`, which describes an
+expected artifact and policy. Artifact-level specifications describe stable
+logical meaning; version-level specifications describe one content revision.
+
+export interface ArtifactSpecification<T = unknown> {
+  schema: string;
+  version: number;
+  value: T;
+}
 
 ---
 
@@ -470,6 +489,8 @@ export interface ArtifactVersion {
   source: ArtifactSource;
 
   integrity?: ArtifactIntegrity;
+
+  specification?: ArtifactSpecification;
 
   createdBy: ActorReference;
 

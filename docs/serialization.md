@@ -1,6 +1,6 @@
 # Serialization and compatibility
 
-These rules settle the wire-level choices required for Artifact Protocol 1.0.
+These rules settle the wire-level choices required for Artifact Protocol 1.1.
 The canonical JSON Schemas remain authoritative if this document and a schema
 ever disagree.
 
@@ -8,7 +8,7 @@ ever disagree.
 
 Every top-level artifact, specification, requirement, submission, and
 verification record must
-contain `"schemaVersion": "1.0"`. This version describes the serialized
+contain `"schemaVersion": "1.1"`. This version describes the serialized
 protocol shape; it is independent of `ArtifactVersion.version` and future
 artifact-specification versions. A breaking wire-format change requires a new
 protocol major version. Compatible additions may use a new minor version and a
@@ -24,7 +24,8 @@ corresponding schema.
   `Z` suffix; consumers must accept valid RFC 3339 offsets.
 - Optional properties are omitted when no value is present. `null` is not a
   substitute for omission unless the property's schema explicitly accepts an
-  arbitrary JSON value, such as an inline value or metadata entry.
+  arbitrary JSON value, such as an inline value, semantic-specification value,
+  or metadata entry.
 - Numeric sizes are non-negative integers measured in bytes. Artifact version
   numbers are positive integers starting at 1. They increase within one
   artifact; gaps are permitted because allocation and persistence are host
@@ -48,7 +49,7 @@ and storage-provider identifiers are non-empty host-defined strings.
 Protocol records permit unknown object properties so that additive protocol and
 extension fields can pass through older implementations. Consumers should
 preserve fields they do not understand when reading and re-emitting a record.
-Unknown source discriminator values still fail 1.0 validation because a
+Unknown source discriminator values still fail 1.1 validation because a
 consumer cannot safely infer that source's required structure.
 
 `metadata` is an object whose members may contain any JSON value. It is for
@@ -69,12 +70,26 @@ Schema validates identifiers and presence, but cross-record rules—such as a
 pinned version belonging to the same artifact—must be checked by a conformance
 or host validation layer that has access to both records.
 
+## Instance semantic specifications
+
+`ArtifactSpecification` is separate from `ArtifactSpec`: it identifies the
+schema and revision governing semantic interpretation of an actual artifact.
+Its `schema` is a non-empty case-sensitive host/domain identifier, `version`
+is a positive integer, and `value` is any JSON value (including `null`). The
+core protocol does not interpret or validate that value beyond its JSON shape.
+
+An `Artifact.specification` applies to stable logical meaning. An
+`ArtifactVersion.specification` applies only to that immutable content
+revision, such as a page, time range, line range, or image region. The fields
+are independent: neither overrides, merges with, nor is inherited from the
+other; hosts set a new version's specification explicitly.
+
 ## Forward-compatible parsing
 
 Implementations should select the schema by `schemaVersion`, validate known
 fields, retain unknown fields, and keep provider references opaque unless an
 extension understands them. Encountering an unsupported protocol major version
-must not be reported as successful validation against 1.0.
+must not be reported as successful validation against 1.1.
 
 JSON numbers follow JSON interoperability limits. Hosts needing exact decimal
 or very large integer semantics should use a structured/string representation

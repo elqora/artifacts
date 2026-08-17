@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://artifact-sdk.dev/schema/1.0/policy/retention-policy.schema.json",
+  "$id": "https://artifact-sdk.dev/schema/1.1/policy/retention-policy.schema.json",
   "title": "ArtifactRetentionPolicy",
   "oneOf": [
     { "$ref": "#/$defs/forever" },
@@ -11,7 +11,7 @@
   "$defs": {
     "forever": { "type": "object", "required": ["policy"], "properties": { "policy": { "const": "forever" } }, "additionalProperties": true },
     "duration": { "type": "object", "required": ["policy", "days"], "properties": { "policy": { "const": "duration" }, "days": { "type": "integer", "minimum": 0 } }, "additionalProperties": true },
-    "until": { "type": "object", "required": ["policy", "date"], "properties": { "policy": { "const": "until" }, "date": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/date" } }, "additionalProperties": true },
+    "until": { "type": "object", "required": ["policy", "date"], "properties": { "policy": { "const": "until" }, "date": { "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/date" } }, "additionalProperties": true },
     "hostDefined": { "type": "object", "required": ["policy", "key"], "properties": { "policy": { "const": "host_defined" }, "key": { "type": "string", "minLength": 1 } }, "additionalProperties": true }
   }
 }

@@ -33,8 +33,8 @@ factories. Generated and facade contracts share the same JSON representation.
 `@elqora/artifacts` is the supported TypeScript package. It is ESM-only,
 requires Node.js 20 or newer, and exposes a single root entry point containing:
 
-- ergonomic generic contracts such as `Artifact`, `ArtifactVersion`, and
-  `ArtifactSpec`;
+- ergonomic generic contracts such as `Artifact`, `ArtifactVersion`,
+  `ArtifactSpecification`, and `ArtifactSpec`;
 - schema-generated `Wire*` contracts;
 - protocol and closed-vocabulary constants.
 

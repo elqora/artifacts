@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://artifact-sdk.dev/schema/1.0/policy/presentation-policy.schema.json",
+  "$id": "https://artifact-sdk.dev/schema/1.1/policy/presentation-policy.schema.json",
   "title": "ArtifactPresentationPolicy",
   "type": "object",
   "properties": {

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://artifact-sdk.dev/schema/1.0/specification/artifact-spec-snapshot.schema.json",
+  "$id": "https://artifact-sdk.dev/schema/1.1/specification/artifact-spec-snapshot.schema.json",
   "title": "ArtifactSpecSnapshot",
   "description": "An immutable copy of a specification revision captured by a host.",
   "type": "object",
@@ -15,10 +15,10 @@
   ],
   "properties": {
     "schemaVersion": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/schemaVersion"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/schemaVersion"
     },
     "sourceSpecId": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactSpecId"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/artifactSpecId"
     },
     "sourceVersion": {
       "type": "integer",
@@ -40,47 +40,47 @@
       "minLength": 1
     },
     "valueType": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactValueType"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/artifactValueType"
     },
     "config": {
       "type": "object",
       "description": "The captured extensible value configuration.",
       "properties": {
         "valueType": {
-          "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactValueType"
+          "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/artifactValueType"
         }
       },
       "additionalProperties": true
     },
     "provider": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/policy/provider-policy.schema.json"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/policy/provider-policy.schema.json"
     },
     "requirement": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/policy/requirement-policy.schema.json"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/policy/requirement-policy.schema.json"
     },
     "lifecycle": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/policy/lifecycle-policy.schema.json"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/policy/lifecycle-policy.schema.json"
     },
     "access": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/policy/access-policy.schema.json"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/policy/access-policy.schema.json"
     },
     "privacy": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/policy/privacy-policy.schema.json"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/policy/privacy-policy.schema.json"
     },
     "validation": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/policy/validation-policy.schema.json"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/policy/validation-policy.schema.json"
     },
     "verification": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/policy/verification-policy.schema.json"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/policy/verification-policy.schema.json"
     },
     "retention": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/policy/retention-policy.schema.json"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/policy/retention-policy.schema.json"
     },
     "presentation": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/policy/presentation-policy.schema.json"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/policy/presentation-policy.schema.json"
     },
     "metadata": {
-      "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/artifactMetadata"
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/artifactMetadata"
     }
   },
   "additionalProperties": true,

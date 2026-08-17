@@ -9,13 +9,13 @@ import { loadSchemaModel } from "../../generators/lib/schema-model.mjs";
 import { renderTypeScript } from "../../generators/lib/render-typescript.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-const artifactId = "https://artifact-sdk.dev/schema/1.0/artifact/artifact.schema.json";
-const conditionId = "https://artifact-sdk.dev/schema/1.0/policy/condition.schema.json";
-const githubId = "https://artifact-sdk.dev/schema/1.0/extensions/github/github-reference.schema.json";
+const artifactId = "https://artifact-sdk.dev/schema/1.1/artifact/artifact.schema.json";
+const conditionId = "https://artifact-sdk.dev/schema/1.1/policy/condition.schema.json";
+const githubId = "https://artifact-sdk.dev/schema/1.1/extensions/github/github-reference.schema.json";
 
 test("schema model loads every core and GitHub schema and resolves references", async () => {
   const model = await loadSchemaModel(root);
-  assert.equal(model.documents.length, 24);
+  assert.equal(model.documents.length, 25);
   const artifact = model.byId.get(artifactId);
   const valueType = model.resolve(artifact.schema.properties.valueType.$ref, artifact.id);
   assert.deepEqual(valueType.node.enum.slice(0, 3), ["text", "number", "boolean"]);

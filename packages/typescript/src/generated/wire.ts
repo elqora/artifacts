@@ -74,6 +74,14 @@ export type WireProviderArtifactSource = {
   [key: string]: unknown;
 };
 
+/** Schema-identified semantic interpretation of an artifact or one immutable artifact version. */
+export type WireArtifactSpecification = {
+  "schema": string;
+  "version": number;
+  "value": unknown;
+  [key: string]: unknown;
+};
+
 export type WireArtifactVersion = {
   "schemaVersion": WireArtifactProtocolCommonContractsSchemaVersion;
   "id": WireArtifactProtocolCommonContractsArtifactVersionId;
@@ -81,6 +89,7 @@ export type WireArtifactVersion = {
   "version": number;
   "source": WireArtifactSource;
   "integrity"?: WireArtifactIntegrity;
+  "specification"?: WireArtifactSpecification;
   "createdBy": WireArtifactProtocolCommonContractsActorReference;
   "createdAt": WireArtifactProtocolCommonContractsTimestamp;
   "note"?: string;
@@ -96,6 +105,7 @@ export type WireArtifact = {
   "valueType": WireArtifactProtocolCommonContractsArtifactValueType;
   "title"?: string;
   "description"?: string;
+  "specification"?: WireArtifactSpecification;
   "currentVersionId"?: WireArtifactProtocolCommonContractsArtifactVersionId;
   "createdBy": WireArtifactProtocolCommonContractsActorReference;
   "createdAt": WireArtifactProtocolCommonContractsTimestamp;
@@ -284,7 +294,7 @@ export type WireArtifactVerificationPolicy = {
 };
 
 /** The major.minor version of the serialized Artifact Protocol record. */
-export type WireArtifactProtocolCommonContractsSchemaVersion = "1.0";
+export type WireArtifactProtocolCommonContractsSchemaVersion = "1.1";
 
 /** A non-empty, case-sensitive identifier whose generation and internal form are host-defined. */
 export type WireArtifactProtocolCommonContractsOpaqueIdentifier = string;

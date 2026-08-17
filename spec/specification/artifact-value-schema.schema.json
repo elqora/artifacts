@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://artifact-sdk.dev/schema/1.0/specification/artifact-value-schema.schema.json",
+  "$id": "https://artifact-sdk.dev/schema/1.1/specification/artifact-value-schema.schema.json",
   "title": "ArtifactValueSchema",
   "description": "Standardized representation constraints. Artifact kind remains a separate host-defined semantic identifier.",
   "oneOf": [
@@ -33,12 +33,12 @@
     },
     "date": {
       "type": "object", "required": ["valueType"],
-      "properties": { "valueType": { "const": "date" }, "minimum": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/date" }, "maximum": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/date" } },
+      "properties": { "valueType": { "const": "date" }, "minimum": { "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/date" }, "maximum": { "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/date" } },
       "additionalProperties": true
     },
     "datetime": {
       "type": "object", "required": ["valueType"],
-      "properties": { "valueType": { "const": "datetime" }, "minimum": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/timestamp" }, "maximum": { "$ref": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json#/$defs/timestamp" } },
+      "properties": { "valueType": { "const": "datetime" }, "minimum": { "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/timestamp" }, "maximum": { "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/timestamp" } },
       "additionalProperties": true
     },
     "time": {

@@ -62,7 +62,7 @@ namespace Elqora\\Artifact;
 
 final class Vocabulary
 {
-    public const PROTOCOL_VERSION = '1.0';
+    public const PROTOCOL_VERSION = '1.1';
     public const ARTIFACT_VALUE_TYPES = [
 ${phpArray(vocab.valueTypes)}
     ];

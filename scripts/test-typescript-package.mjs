@@ -79,6 +79,7 @@ try {
   writeFileSync(path.join(consumer, "consumer.ts"), `import {
   ARTIFACT_PROTOCOL_VERSION,
   type Artifact,
+  type ArtifactSpecification,
   type ArtifactLink,
   type ArtifactSource,
   type ArtifactSpec,
@@ -96,7 +97,14 @@ const artifact = {
   createdBy: { type: "user", id: "user_1" },
   createdAt: "2026-08-15T09:00:00Z",
   updatedAt: "2026-08-15T09:00:00Z",
-} satisfies Artifact<"delivery_evidence", "image">;
+  specification: {
+    schema: "image-subject",
+    version: 1,
+    value: { subject: "Delivery entrance" },
+  },
+} satisfies Artifact<"delivery_evidence", "image", { subject: string }>;
+
+const artifactSpecification = artifact.specification satisfies ArtifactSpecification<{ subject: string }>;
 
 const source = { type: "url", url: "https://example.test/evidence.png" } satisfies ArtifactSource;
 const version = {
@@ -107,7 +115,12 @@ const version = {
   source,
   createdBy: { type: "user", id: "user_1" },
   createdAt: "2026-08-15T09:00:00Z",
-} satisfies ArtifactVersion<typeof source>;
+  specification: {
+    schema: "image-region",
+    version: 1,
+    value: { x: 120, y: 45, width: 310, height: 180 },
+  },
+} satisfies ArtifactVersion<typeof source, { x: number; y: number; width: number; height: number }>;
 const link = {
   schemaVersion: ARTIFACT_PROTOCOL_VERSION,
   id: "link_1",
@@ -145,7 +158,7 @@ const verification = {
   createdAt: "2026-08-15T09:02:00Z",
 } satisfies ArtifactVerification;
 const wire: WireArtifact = artifact;
-void [link, spec, verification, wire];
+void [artifactSpecification, link, spec, verification, wire];
 `);
   writeFileSync(path.join(consumer, "runtime.mjs"), `import {
   ARTIFACT_PROTOCOL_VERSION,
@@ -154,7 +167,7 @@ void [link, spec, verification, wire];
 } from "@elqora/artifacts";
 import assert from "node:assert/strict";
 
-assert.equal(ARTIFACT_PROTOCOL_VERSION, "1.0");
+assert.equal(ARTIFACT_PROTOCOL_VERSION, "1.1");
 assert(ARTIFACT_SOURCE_TYPES.includes("provider"));
 assert(ARTIFACT_VALUE_TYPES.includes("collection"));
 `);

@@ -4,7 +4,9 @@ The canonical dependency direction is:
 
 ```text
 Artifact (logical identity)
+  -> ArtifactSpecification (optional stable semantic interpretation)
   -> ArtifactVersion (immutable revision)
+       -> ArtifactSpecification (optional revision-specific interpretation)
        -> ArtifactSource (inline, local, object, URL, hosted, or provider)
        -> ArtifactIntegrity (optional digest)
 

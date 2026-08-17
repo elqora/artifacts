@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "id": "req_auth_impl",
   "key": "authentication_implementation",
   "allowedKinds": ["implementation"],

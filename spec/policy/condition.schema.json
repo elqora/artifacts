@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://artifact-sdk.dev/schema/1.0/policy/condition.schema.json",
+  "$id": "https://artifact-sdk.dev/schema/1.1/policy/condition.schema.json",
   "title": "ArtifactCondition",
   "description": "A language-neutral recursive condition AST. Resolution of host identifiers is host-defined.",
   "$ref": "#/$defs/condition",

@@ -22,15 +22,23 @@ The package is ESM-only and supports Node.js 20 or newer.
 import {
   ARTIFACT_PROTOCOL_VERSION,
   type Artifact,
+  type ArtifactSpecification,
   type ArtifactSpec,
   type ArtifactVersion,
 } from "@elqora/artifacts";
 
-const artifact: Artifact<"delivery_evidence", "image"> = {
+type ImageSubject = { subject: string };
+
+const artifact: Artifact<"delivery_evidence", "image", ImageSubject> = {
   schemaVersion: ARTIFACT_PROTOCOL_VERSION,
   id: "artifact_1",
   kind: "delivery_evidence",
   valueType: "image",
+  specification: {
+    schema: "image-subject",
+    version: 1,
+    value: { subject: "Delivery entrance" },
+  } satisfies ArtifactSpecification<ImageSubject>,
   createdBy: { type: "user", id: "user_1" },
   createdAt: "2026-08-15T09:00:00Z",
   updatedAt: "2026-08-15T09:00:00Z",

@@ -30,7 +30,7 @@ npm run build
 npm run generate
 ```
 
-The canonical schemas implement Artifact Protocol `1.0` using JSON Schema
+The canonical schemas implement Artifact Protocol `1.1` using JSON Schema
 Draft 2020-12. Run `npm run check:generated` to prove generated binding
 vocabularies match those schemas.
 

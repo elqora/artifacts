@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://artifact-sdk.dev/schema/1.0/extensions/github/github-reference.schema.json",
+  "$id": "https://artifact-sdk.dev/schema/1.1/extensions/github/github-reference.schema.json",
   "title": "GitHubArtifactReference",
   "oneOf": [
     { "$ref": "#/$defs/pullRequest" }, { "$ref": "#/$defs/commit" },

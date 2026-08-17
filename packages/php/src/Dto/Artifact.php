@@ -96,6 +96,17 @@ final readonly class Artifact
         return array_key_exists('description', $this->data);
     }
 
+    /** @return array<mixed>|null */
+    public function specification(): ?array
+    {
+        return $this->data['specification'] ?? null;
+    }
+
+    public function hasSpecification(): bool
+    {
+        return array_key_exists('specification', $this->data);
+    }
+
     public function currentVersionId(): ?string
     {
         return $this->data['currentVersionId'] ?? null;
@@ -161,7 +172,7 @@ final readonly class Artifact
     /** @return array<string, mixed> */
     public function unknownFields(): array
     {
-        return array_diff_key($this->data, ['schemaVersion' => true, 'id' => true, 'scope' => true, 'kind' => true, 'valueType' => true, 'title' => true, 'description' => true, 'currentVersionId' => true, 'createdBy' => true, 'createdAt' => true, 'updatedAt' => true, 'archivedAt' => true, 'metadata' => true]);
+        return array_diff_key($this->data, ['schemaVersion' => true, 'id' => true, 'scope' => true, 'kind' => true, 'valueType' => true, 'title' => true, 'description' => true, 'specification' => true, 'currentVersionId' => true, 'createdBy' => true, 'createdAt' => true, 'updatedAt' => true, 'archivedAt' => true, 'metadata' => true]);
     }
 
     /** @return array<string, mixed> */

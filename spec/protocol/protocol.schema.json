@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json",
+  "$id": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json",
   "title": "Artifact Protocol Common Contracts",
-  "description": "Reusable contracts for Artifact Protocol 1.0 records.",
+  "description": "Reusable contracts for Artifact Protocol 1.1 records.",
   "$defs": {
     "schemaVersion": {
       "type": "string",
-      "const": "1.0",
+      "const": "1.1",
       "description": "The major.minor version of the serialized Artifact Protocol record."
     },
     "opaqueIdentifier": {

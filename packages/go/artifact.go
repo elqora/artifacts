@@ -1,4 +1,4 @@
-// Package artifact exposes Artifact Protocol 1.0 records without implementing host behavior.
+// Package artifact exposes Artifact Protocol 1.1 records without implementing host behavior.
 //
 // The original unprefixed structs remain as a source-compatible facade. New
 // integrations should prefer the schema-generated Wire* contracts and the
@@ -7,7 +7,7 @@ package artifact
 
 import "encoding/json"
 
-const ProtocolVersion = "1.0"
+const ProtocolVersion = "1.1"
 
 type Metadata map[string]any
 type ActorReference struct {
@@ -25,20 +25,28 @@ type SubjectReference struct {
 	Scope map[string]string `json:"scope,omitempty"`
 }
 
+// ArtifactSpecification is schema-identified semantic interpretation data for an artifact or immutable version.
+type ArtifactSpecification struct {
+	Schema  string          `json:"schema"`
+	Version int             `json:"version"`
+	Value   json.RawMessage `json:"value"`
+}
+
 type Artifact struct {
-	SchemaVersion    string          `json:"schemaVersion"`
-	ID               string          `json:"id"`
-	Scope            *ScopeReference `json:"scope,omitempty"`
-	Kind             string          `json:"kind"`
-	ValueType        string          `json:"valueType"`
-	Title            string          `json:"title,omitempty"`
-	Description      string          `json:"description,omitempty"`
-	CurrentVersionID string          `json:"currentVersionId,omitempty"`
-	CreatedBy        ActorReference  `json:"createdBy"`
-	CreatedAt        string          `json:"createdAt"`
-	UpdatedAt        string          `json:"updatedAt"`
-	ArchivedAt       string          `json:"archivedAt,omitempty"`
-	Metadata         Metadata        `json:"metadata,omitempty"`
+	SchemaVersion    string                 `json:"schemaVersion"`
+	ID               string                 `json:"id"`
+	Scope            *ScopeReference        `json:"scope,omitempty"`
+	Kind             string                 `json:"kind"`
+	ValueType        string                 `json:"valueType"`
+	Title            string                 `json:"title,omitempty"`
+	Description      string                 `json:"description,omitempty"`
+	Specification    *ArtifactSpecification `json:"specification,omitempty"`
+	CurrentVersionID string                 `json:"currentVersionId,omitempty"`
+	CreatedBy        ActorReference         `json:"createdBy"`
+	CreatedAt        string                 `json:"createdAt"`
+	UpdatedAt        string                 `json:"updatedAt"`
+	ArchivedAt       string                 `json:"archivedAt,omitempty"`
+	Metadata         Metadata               `json:"metadata,omitempty"`
 }
 
 type InlineArtifactSource struct {
@@ -87,16 +95,17 @@ type ArtifactIntegrity struct {
 	VerifiedAt string `json:"verifiedAt,omitempty"`
 }
 type ArtifactVersion struct {
-	SchemaVersion string             `json:"schemaVersion"`
-	ID            string             `json:"id"`
-	ArtifactID    string             `json:"artifactId"`
-	Version       int                `json:"version"`
-	Source        json.RawMessage    `json:"source"`
-	Integrity     *ArtifactIntegrity `json:"integrity,omitempty"`
-	CreatedBy     ActorReference     `json:"createdBy"`
-	CreatedAt     string             `json:"createdAt"`
-	Note          string             `json:"note,omitempty"`
-	Metadata      Metadata           `json:"metadata,omitempty"`
+	SchemaVersion string                 `json:"schemaVersion"`
+	ID            string                 `json:"id"`
+	ArtifactID    string                 `json:"artifactId"`
+	Version       int                    `json:"version"`
+	Source        json.RawMessage        `json:"source"`
+	Integrity     *ArtifactIntegrity     `json:"integrity,omitempty"`
+	Specification *ArtifactSpecification `json:"specification,omitempty"`
+	CreatedBy     ActorReference         `json:"createdBy"`
+	CreatedAt     string                 `json:"createdAt"`
+	Note          string                 `json:"note,omitempty"`
+	Metadata      Metadata               `json:"metadata,omitempty"`
 }
 type ArtifactLink struct {
 	SchemaVersion     string           `json:"schemaVersion"`

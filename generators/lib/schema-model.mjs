@@ -83,12 +83,12 @@ export async function loadSchemaModel(repositoryRoot) {
 
 export function schemaVocabularies(model) {
   const get = (id) => model.byId.get(id)?.schema ?? (() => { throw new Error(`Missing schema ${id}`); })();
-  const protocol = get("https://artifact-sdk.dev/schema/1.0/protocol/protocol.schema.json");
-  const source = get("https://artifact-sdk.dev/schema/1.0/artifact/artifact-source.schema.json");
-  const integrity = get("https://artifact-sdk.dev/schema/1.0/artifact/artifact-integrity.schema.json");
-  const condition = get("https://artifact-sdk.dev/schema/1.0/policy/condition.schema.json");
-  const privacy = get("https://artifact-sdk.dev/schema/1.0/policy/privacy-policy.schema.json");
-  const verification = get("https://artifact-sdk.dev/schema/1.0/runtime/verification.schema.json");
+  const protocol = get("https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json");
+  const source = get("https://artifact-sdk.dev/schema/1.1/artifact/artifact-source.schema.json");
+  const integrity = get("https://artifact-sdk.dev/schema/1.1/artifact/artifact-integrity.schema.json");
+  const condition = get("https://artifact-sdk.dev/schema/1.1/policy/condition.schema.json");
+  const privacy = get("https://artifact-sdk.dev/schema/1.1/policy/privacy-policy.schema.json");
+  const verification = get("https://artifact-sdk.dev/schema/1.1/runtime/verification.schema.json");
   return {
     valueTypes: protocol.$defs.artifactValueType.enum,
     sourceTypes: source.oneOf.map(({ $ref }) => $ref.replace("#/$defs/", "")),
