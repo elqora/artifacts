@@ -6,7 +6,7 @@ The project follows Semantic Versioning for package releases. During `0.x`,
 changes remain additive by default and breaking corrections must be called out
 explicitly.
 
-## 0.1.0 - Unreleased
+## 0.2.0 - Unreleased
 
 ### Added
 
