@@ -12,7 +12,7 @@ namespace Elqora\Artifact;
  * @phpstan-type ScopeReference array{type: non-empty-string, id: non-empty-string}
  * @phpstan-type SubjectReference array{type: non-empty-string, id: non-empty-string, scope?: array<string, string>}
  * @phpstan-type ArtifactSpecification array{schema: non-empty-string, version: positive-int, value: mixed}
- * @phpstan-type Artifact array{schemaVersion: '1.1', id: non-empty-string, scope?: ScopeReference, kind: non-empty-string, valueType: string, title?: string, description?: string, specification?: ArtifactSpecification, currentVersionId?: non-empty-string, createdBy: ActorReference, createdAt: string, updatedAt: string, archivedAt?: string, metadata?: Metadata}
+ * @phpstan-type Artifact array{schemaVersion: '1.1', id: non-empty-string, specId: non-empty-string, scope?: ScopeReference, kind: non-empty-string, valueType: string, title?: string, description?: string, specification?: ArtifactSpecification, currentVersionId?: non-empty-string, createdBy: ActorReference, createdAt: string, updatedAt: string, archivedAt?: string, metadata?: Metadata}
  * @phpstan-type InlineSource array{type: 'inline', value: mixed, mediaType?: non-empty-string}
  * @phpstan-type LocalSource array{type: 'local', localId: non-empty-string, filename?: string, mediaType?: non-empty-string, size?: int<0, max>, syncState: string, remoteVersionId?: non-empty-string}
  * @phpstan-type ObjectSource array{type: 'object', objectId: non-empty-string, filename?: string, mediaType?: non-empty-string, size?: int<0, max>, storageProvider?: non-empty-string}
@@ -30,7 +30,8 @@ namespace Elqora\Artifact;
  * @phpstan-type AccessRule array{actors: list<non-empty-string>, condition?: Condition}
  * @phpstan-type AccessPolicy array{read?: list<AccessRule>, write?: list<AccessRule>, submit?: list<AccessRule>, verify?: list<AccessRule>}
  * @phpstan-type PrivacyPolicy array{classification: 'public'|'internal'|'private'|'sensitive'|'restricted', reveal?: list<array{actors: list<non-empty-string>, when?: Condition, representation: 'hidden'|'masked'|'approximate'|'full'}>, masking?: array{strategy: non-empty-string, config?: array<string, mixed>}, encryption?: array{required: bool, level?: non-empty-string, keyScope?: non-empty-string}}
- * @phpstan-type ValidationPolicy array{mode?: 'strict'|'lenient', rules?: list<array{type: non-empty-string, config?: array<string, mixed>}>}
+ * @phpstan-type ValidationSchema array<non-empty-string, non-empty-string|list<non-empty-string>>
+ * @phpstan-type ValidationPolicy array{mode?: 'strict'|'lenient', schema?: ValidationSchema, rules?: list<array{type: non-empty-string, config?: array<string, mixed>}>}
  * @phpstan-type VerificationPolicy array{required: bool, methods?: list<non-empty-string>, actors?: list<non-empty-string>, condition?: Condition}
  * @phpstan-type RetentionPolicy array{policy: 'forever'}|array{policy: 'duration', days: int<0, max>}|array{policy: 'until', date: string}|array{policy: 'host_defined', key: non-empty-string}
  * @phpstan-type PresentationPolicy array{label?: string, helpText?: string, order?: int|float, display?: non-empty-string, config?: array<string, mixed>}

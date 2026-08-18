@@ -1,6 +1,7 @@
 {
   "schemaVersion": "1.1",
   "id": "art_site_photo",
+  "specId": "artspec_site_observation",
   "kind": "site_observation",
   "valueType": "image",
   "title": "Site photograph",

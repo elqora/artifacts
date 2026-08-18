@@ -1,4 +1,5 @@
 export type * from "./generated/wire.js";
+export * from "./editor.js";
 import type * as Generated from "./generated/wire.js";
 import {
   ARTIFACT_CONDITION_KINDS,
@@ -78,8 +79,9 @@ export interface Artifact<
   TKind extends string = ArtifactKind,
   TValueType extends ArtifactValueType = ArtifactValueType,
   TSpecification = unknown,
-> extends ArtifactProtocolRecord, Omit<Generated.WireArtifact, "scope" | "kind" | "valueType" | "specification" | "createdBy" | "metadata"> {
+> extends ArtifactProtocolRecord, Omit<Generated.WireArtifact, "scope" | "specId" | "kind" | "valueType" | "specification" | "createdBy" | "metadata"> {
   id: ArtifactId;
+  specId: ArtifactSpecId;
   scope?: ArtifactScopeReference;
   kind: TKind;
   valueType: TValueType;
@@ -296,8 +298,12 @@ export interface ArtifactValidationRule extends Generated.WireArtifactValidation
   config?: Record<string, unknown>;
 }
 
-export interface ArtifactValidationPolicy extends Omit<Generated.WireArtifactValidationPolicy, "rules"> {
+/** Laravel-style serializable rules applied to an artifact specification value. */
+export type ArtifactValidationSchema = Record<string, string | string[]>;
+
+export interface ArtifactValidationPolicy extends Omit<Generated.WireArtifactValidationPolicy, "schema" | "rules"> {
   mode?: "strict" | "lenient";
+  schema?: ArtifactValidationSchema;
   rules?: ArtifactValidationRule[];
 }
 

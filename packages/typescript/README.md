@@ -32,6 +32,7 @@ type ImageSubject = { subject: string };
 const artifact: Artifact<"delivery_evidence", "image", ImageSubject> = {
   schemaVersion: ARTIFACT_PROTOCOL_VERSION,
   id: "artifact_1",
+  specId: "spec_1",
   kind: "delivery_evidence",
   valueType: "image",
   specification: {
@@ -49,6 +50,32 @@ The root export includes the ergonomic TypeScript interfaces, generated
 `Wire*` contracts, and closed-vocabulary constants. Generated contracts follow
 the canonical JSON Schemas in the
 [source repository](https://github.com/elqora/artifacts).
+
+## Programmatic editing
+
+Artifacts require a matching specification list when opened in an editor. Edits
+are grouped with callback transactions; failures roll back automatically and
+are returned as `{ ok: false, error }`. Successful transactions return the
+updated value and create one local history entry.
+
+```ts
+const opened = ArtifactEditor.open(artifact, { specs });
+
+if (opened.ok) {
+  const result = opened.value.transaction((tx) => {
+    tx.setTitle("Updated evidence");
+    tx.updateMetadata({ reviewed: true });
+  });
+
+  if (result.ok) {
+    opened.value.history.undo();
+  }
+}
+```
+
+`ArtifactSpecEditor` provides the same editing model for specification
+definitions. Neither editor persists data, executes host validation, or creates
+artifact versions.
 
 ## Compatibility
 

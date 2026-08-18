@@ -100,6 +100,7 @@ export type WireArtifactVersion = {
 export type WireArtifact = {
   "schemaVersion": WireArtifactProtocolCommonContractsSchemaVersion;
   "id": WireArtifactProtocolCommonContractsArtifactId;
+  "specId": WireArtifactProtocolCommonContractsArtifactSpecId;
   "scope"?: WireArtifactProtocolCommonContractsArtifactScopeReference;
   "kind": string;
   "valueType": WireArtifactProtocolCommonContractsArtifactValueType;
@@ -273,6 +274,9 @@ export type WireArtifactRetentionPolicyHostDefined = {
 
 export type WireArtifactValidationPolicy = {
   "mode"?: "strict" | "lenient";
+  "schema"?: {
+  [key: string]: string | Array<string>;
+};
   "rules"?: Array<WireArtifactValidationRule>;
   [key: string]: unknown;
 };

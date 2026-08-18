@@ -3,7 +3,7 @@
 The canonical dependency direction is:
 
 ```text
-Artifact (logical identity)
+Artifact (logical identity, required specId)
   -> ArtifactSpecification (optional stable semantic interpretation)
   -> ArtifactVersion (immutable revision)
        -> ArtifactSpecification (optional revision-specific interpretation)

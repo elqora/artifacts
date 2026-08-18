@@ -35,6 +35,9 @@ requires Node.js 20 or newer, and exposes a single root entry point containing:
 
 - ergonomic generic contracts such as `Artifact`, `ArtifactVersion`,
   `ArtifactSpecification`, and `ArtifactSpec`;
+- programmatic `ArtifactEditor` and `ArtifactSpecEditor` facades with
+  callback transactions and local undo/redo history;
+- [editing documentation](./editing.md);
 - schema-generated `Wire*` contracts;
 - protocol and closed-vocabulary constants.
 

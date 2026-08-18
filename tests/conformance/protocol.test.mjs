@@ -172,6 +172,10 @@ test("every declarative policy fixture conforms and closed policy vocabulary rej
   assertInvalid(validators.privacyPolicy, { classification: "secret" });
   assertInvalid(validators.retentionPolicy, { policy: "duration", days: -1 });
   assertInvalid(validators.requirementPolicy, { mode: "conditional" });
+  assertInvalid(
+    validators.validationPolicy,
+    await readJson(path.join(fixtureRoot, "invalid", "policy", "validation-schema.json")),
+  );
 });
 
 test("spec config representation agrees with the containing valueType", async () => {
@@ -304,6 +308,7 @@ test("host-defined vocabularies and unknown additive properties remain open", ()
   assertValid(validateArtifact, {
     schemaVersion: "1.1",
     id: "opaque:ART-1",
+    specId: "artspec_host_specific",
     kind: "host_specific_kind",
     valueType: "reference",
     createdBy: { type: "host_actor_type", hostField: 7 },

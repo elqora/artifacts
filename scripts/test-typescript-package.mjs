@@ -78,6 +78,8 @@ try {
   }, null, 2)}\n`);
   writeFileSync(path.join(consumer, "consumer.ts"), `import {
   ARTIFACT_PROTOCOL_VERSION,
+  ArtifactEditor,
+  ArtifactSpecEditor,
   type Artifact,
   type ArtifactSpecification,
   type ArtifactLink,
@@ -92,6 +94,7 @@ try {
 const artifact = {
   schemaVersion: ARTIFACT_PROTOCOL_VERSION,
   id: "artifact_1",
+  specId: "spec_1",
   kind: "delivery_evidence",
   valueType: "image",
   createdBy: { type: "user", id: "user_1" },
@@ -140,6 +143,13 @@ const spec = {
   kind: "delivery_evidence",
   valueType: "image",
 } satisfies ArtifactSpec<"delivery_evidence", "image">;
+const opened = ArtifactEditor.open(artifact, { specs: [spec] });
+if (!opened.ok) throw opened.error;
+const editResult = opened.value.transaction((tx) => tx.setTitle("Edited evidence"));
+if (!editResult.ok) throw editResult.error;
+const specEditor = ArtifactSpecEditor.open(spec);
+const specEditResult = specEditor.transaction((tx) => tx.setName("Edited evidence spec"));
+if (!specEditResult.ok) throw specEditResult.error;
 const submission = {
   schemaVersion: ARTIFACT_PROTOCOL_VERSION,
   id: "submission_1",
@@ -158,7 +168,7 @@ const verification = {
   createdAt: "2026-08-15T09:02:00Z",
 } satisfies ArtifactVerification;
 const wire: WireArtifact = artifact;
-void [artifactSpecification, link, spec, verification, wire];
+void [artifactSpecification, link, spec, verification, wire, opened, specEditor];
 `);
   writeFileSync(path.join(consumer, "runtime.mjs"), `import {
   ARTIFACT_PROTOCOL_VERSION,

@@ -102,6 +102,7 @@ type WireArtifactVersion struct {
 type WireArtifact struct {
 	SchemaVersion WireArtifactProtocolCommonContractsSchemaVersion `json:"schemaVersion"`
 	ID WireArtifactProtocolCommonContractsArtifactID `json:"id"`
+	SpecID WireArtifactProtocolCommonContractsArtifactSpecID `json:"specId"`
 	Scope *WireArtifactProtocolCommonContractsArtifactScopeReference `json:"scope,omitempty"`
 	Kind string `json:"kind"`
 	ValueType WireArtifactProtocolCommonContractsArtifactValueType `json:"valueType"`
@@ -270,6 +271,7 @@ type WireArtifactRetentionPolicyHostDefined struct {
 
 type WireArtifactValidationPolicy struct {
 	Mode *string `json:"mode,omitempty"`
+	Schema map[string]any `json:"schema,omitempty"`
 	Rules []WireArtifactValidationRule `json:"rules,omitempty"`
 	UnknownFields map[string]json.RawMessage `json:"-"`
 }
@@ -817,7 +819,7 @@ func (value *WireArtifact) UnmarshalJSON(data []byte) error {
 	*value = WireArtifact(decoded)
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil { return err }
-	known := map[string]struct{}{"schemaVersion": {}, "id": {}, "scope": {}, "kind": {}, "valueType": {}, "title": {}, "description": {}, "specification": {}, "currentVersionId": {}, "createdBy": {}, "createdAt": {}, "updatedAt": {}, "archivedAt": {}, "metadata": {}}
+	known := map[string]struct{}{"schemaVersion": {}, "id": {}, "specId": {}, "scope": {}, "kind": {}, "valueType": {}, "title": {}, "description": {}, "specification": {}, "currentVersionId": {}, "createdBy": {}, "createdAt": {}, "updatedAt": {}, "archivedAt": {}, "metadata": {}}
 	for key := range known { delete(fields, key) }
 	if len(fields) > 0 { value.UnknownFields = fields }
 	return nil
@@ -828,7 +830,7 @@ func (value WireArtifact) MarshalJSON() ([]byte, error) {
 	knownBytes, err := json.Marshal(plain(value)); if err != nil { return nil, err }
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(knownBytes, &fields); err != nil { return nil, err }
-	reserved := map[string]struct{}{"schemaVersion": {}, "id": {}, "scope": {}, "kind": {}, "valueType": {}, "title": {}, "description": {}, "specification": {}, "currentVersionId": {}, "createdBy": {}, "createdAt": {}, "updatedAt": {}, "archivedAt": {}, "metadata": {}}
+	reserved := map[string]struct{}{"schemaVersion": {}, "id": {}, "specId": {}, "scope": {}, "kind": {}, "valueType": {}, "title": {}, "description": {}, "specification": {}, "currentVersionId": {}, "createdBy": {}, "createdAt": {}, "updatedAt": {}, "archivedAt": {}, "metadata": {}}
 	for key, raw := range value.UnknownFields { if _, knownKey := reserved[key]; !knownKey { fields[key] = raw } }
 	return json.Marshal(fields)
 }
@@ -1323,7 +1325,7 @@ func (value *WireArtifactValidationPolicy) UnmarshalJSON(data []byte) error {
 	*value = WireArtifactValidationPolicy(decoded)
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil { return err }
-	known := map[string]struct{}{"mode": {}, "rules": {}}
+	known := map[string]struct{}{"mode": {}, "schema": {}, "rules": {}}
 	for key := range known { delete(fields, key) }
 	if len(fields) > 0 { value.UnknownFields = fields }
 	return nil
@@ -1334,7 +1336,7 @@ func (value WireArtifactValidationPolicy) MarshalJSON() ([]byte, error) {
 	knownBytes, err := json.Marshal(plain(value)); if err != nil { return nil, err }
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(knownBytes, &fields); err != nil { return nil, err }
-	reserved := map[string]struct{}{"mode": {}, "rules": {}}
+	reserved := map[string]struct{}{"mode": {}, "schema": {}, "rules": {}}
 	for key, raw := range value.UnknownFields { if _, knownKey := reserved[key]; !knownKey { fields[key] = raw } }
 	return json.Marshal(fields)
 }

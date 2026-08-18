@@ -6,6 +6,7 @@
   "required": [
     "schemaVersion",
     "id",
+    "specId",
     "kind",
     "valueType",
     "createdBy",
@@ -18,6 +19,9 @@
     },
     "id": {
       "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/artifactId"
+    },
+    "specId": {
+      "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/artifactSpecId"
     },
     "scope": {
       "$ref": "https://artifact-sdk.dev/schema/1.1/protocol/protocol.schema.json#/$defs/artifactScopeReference"

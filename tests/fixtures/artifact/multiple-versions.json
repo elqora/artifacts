@@ -1,6 +1,7 @@
 {
   "schemaVersion": "1.1",
   "id": "art_design",
+  "specId": "artspec_design_mockup",
   "kind": "design_mockup",
   "valueType": "file",
   "title": "Homepage design",
@@ -12,4 +13,3 @@
   "createdAt": "2026-08-14T08:00:00Z",
   "updatedAt": "2026-08-15T08:00:00Z"
 }
-

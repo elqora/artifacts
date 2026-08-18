@@ -11,6 +11,7 @@ import {
   type ArtifactSpecSnapshot,
   type ArtifactSubmission,
   type ArtifactVerification,
+  type ArtifactValidationPolicy,
   type WireArtifact,
   type WireArtifactSpec,
   type WireArtifactSubmission,
@@ -23,6 +24,7 @@ const actor = { type: "host_actor", id: "actor_1" };
 const artifact = {
   schemaVersion: ARTIFACT_PROTOCOL_VERSION,
   id: "art_1",
+  specId: "artspec_host_defined",
   kind: "host_defined_kind",
   valueType: "reference",
   createdBy: actor,
@@ -110,6 +112,12 @@ const imageSpec = {
     reveal: [{ actors: ["reviewer"], representation: "masked" }],
     encryption: { required: true },
   },
+  validation: {
+    schema: {
+      locations: "required|object",
+      "locations.name": ["required", "string"],
+    },
+  } satisfies ArtifactValidationPolicy,
 } satisfies ArtifactSpec<"evidence_photo", "image">;
 
 const { id: sourceSpecId, version: sourceVersion, ...snapshotDefinition } = imageSpec;

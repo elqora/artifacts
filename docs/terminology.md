@@ -1,6 +1,7 @@
 # Terminology
 
-`Artifact` is logical identity. `ArtifactVersion` is an immutable content
+`Artifact` is logical identity and must reference an `ArtifactSpec` through
+`specId`. `ArtifactVersion` is an immutable content
 revision and owns one `ArtifactSource`. `ArtifactLink` describes a usage or
 relationship and can follow the logical artifact or pin one exact version.
 

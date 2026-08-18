@@ -30,6 +30,17 @@ final readonly class ArtifactValidationPolicy
     }
 
     /** @return array<mixed>|null */
+    public function schema(): ?array
+    {
+        return $this->data['schema'] ?? null;
+    }
+
+    public function hasSchema(): bool
+    {
+        return array_key_exists('schema', $this->data);
+    }
+
+    /** @return array<mixed>|null */
     public function rules(): ?array
     {
         return $this->data['rules'] ?? null;
@@ -43,7 +54,7 @@ final readonly class ArtifactValidationPolicy
     /** @return array<string, mixed> */
     public function unknownFields(): array
     {
-        return array_diff_key($this->data, ['mode' => true, 'rules' => true]);
+        return array_diff_key($this->data, ['mode' => true, 'schema' => true, 'rules' => true]);
     }
 
     /** @return array<string, mixed> */

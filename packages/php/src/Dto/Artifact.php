@@ -17,6 +17,7 @@ final readonly class Artifact
     {
         if (!array_key_exists('schemaVersion', $data)) { throw new InvalidArgumentException('Missing required field schemaVersion for Artifact.'); }
         if (!array_key_exists('id', $data)) { throw new InvalidArgumentException('Missing required field id for Artifact.'); }
+        if (!array_key_exists('specId', $data)) { throw new InvalidArgumentException('Missing required field specId for Artifact.'); }
         if (!array_key_exists('kind', $data)) { throw new InvalidArgumentException('Missing required field kind for Artifact.'); }
         if (!array_key_exists('valueType', $data)) { throw new InvalidArgumentException('Missing required field valueType for Artifact.'); }
         if (!array_key_exists('createdBy', $data)) { throw new InvalidArgumentException('Missing required field createdBy for Artifact.'); }
@@ -43,6 +44,16 @@ final readonly class Artifact
     public function hasId(): bool
     {
         return array_key_exists('id', $this->data);
+    }
+
+    public function specId(): string
+    {
+        return $this->data['specId'];
+    }
+
+    public function hasSpecId(): bool
+    {
+        return array_key_exists('specId', $this->data);
     }
 
     /** @return array<mixed>|null */
@@ -172,7 +183,7 @@ final readonly class Artifact
     /** @return array<string, mixed> */
     public function unknownFields(): array
     {
-        return array_diff_key($this->data, ['schemaVersion' => true, 'id' => true, 'scope' => true, 'kind' => true, 'valueType' => true, 'title' => true, 'description' => true, 'specification' => true, 'currentVersionId' => true, 'createdBy' => true, 'createdAt' => true, 'updatedAt' => true, 'archivedAt' => true, 'metadata' => true]);
+        return array_diff_key($this->data, ['schemaVersion' => true, 'id' => true, 'specId' => true, 'scope' => true, 'kind' => true, 'valueType' => true, 'title' => true, 'description' => true, 'specification' => true, 'currentVersionId' => true, 'createdBy' => true, 'createdAt' => true, 'updatedAt' => true, 'archivedAt' => true, 'metadata' => true]);
     }
 
     /** @return array<string, mixed> */

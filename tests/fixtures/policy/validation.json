@@ -1,1 +1,13 @@
-{ "mode": "strict", "rules": [{ "type": "mime_type", "config": { "allowed": ["image/jpeg", "image/png"] } }] }
+{
+  "mode": "strict",
+  "schema": {
+    "locations": "required|object",
+    "locations.name": ["required", "string"]
+  },
+  "rules": [
+    {
+      "type": "mime_type",
+      "config": { "allowed": ["image/jpeg", "image/png"] }
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 {
   "schemaVersion": "1.1",
   "id": "art_delivery_note",
+  "specId": "artspec_delivery_note",
   "scope": {
     "type": "workspace",
     "id": "workspace_alpha"
@@ -19,4 +20,3 @@
     "hostLabel": "handover"
   }
 }
-

@@ -35,6 +35,7 @@ type ArtifactSpecification struct {
 type Artifact struct {
 	SchemaVersion    string                 `json:"schemaVersion"`
 	ID               string                 `json:"id"`
+	SpecID           string                 `json:"specId"`
 	Scope            *ScopeReference        `json:"scope,omitempty"`
 	Kind             string                 `json:"kind"`
 	ValueType        string                 `json:"valueType"`
@@ -184,8 +185,9 @@ type ValidationRule struct {
 	Config map[string]any `json:"config,omitempty"`
 }
 type ValidationPolicy struct {
-	Mode  string           `json:"mode,omitempty"`
-	Rules []ValidationRule `json:"rules,omitempty"`
+	Mode   string              `json:"mode,omitempty"`
+	Schema map[string]any      `json:"schema,omitempty"`
+	Rules  []ValidationRule    `json:"rules,omitempty"`
 }
 type VerificationPolicy struct {
 	Required  bool       `json:"required"`

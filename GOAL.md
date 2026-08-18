@@ -1,6 +1,24 @@
-Artifact SDK — Language-Neutral Specification and Implementation Design
+# Artifact SDK — Language-Neutral Specification and Implementation Design
 
-1. Purpose
+This document is the authoritative architecture and implementation brief for the
+Artifact SDK. It defines the shared, language-neutral artifact protocol and the
+boundaries between the SDK and host applications.
+
+## Contents
+
+- [Part I — Foundations](#part-i--foundations)
+- [Part II — Core model](#part-ii--core-model)
+- [Part III — Records, sources, and integrity](#part-iii--records-sources-and-integrity)
+- [Part IV — Relationships](#part-iv--relationships)
+- [Part V — Specifications and policies](#part-v--specifications-and-policies)
+- [Part VI — Runtime records](#part-vi--runtime-records)
+- [Part VII — Cross-host examples](#part-vii--cross-host-examples)
+- [Part VIII — Protocol operation and evolution](#part-viii--protocol-operation-and-evolution)
+- [Part IX — Implementer reference](#part-ix--implementer-reference)
+
+## Part I — Foundations
+
+### 1. Purpose
 
 The Artifact SDK is intended to define a language-neutral artifact protocol that can be reused across unrelated applications.
 
@@ -44,7 +62,9 @@ Examples include:
 
 The central abstraction is:
 
-«An artifact is a typed, identifiable, versionable piece of information, evidence, output, or reference that can participate in relationships and workflows.»
+> An artifact is a typed, identifiable, versionable piece of information,
+> evidence, output, or reference that can participate in relationships and
+> workflows.
 
 The SDK defines what these records mean.
 
@@ -52,15 +72,17 @@ The host application defines what happens because of them.
 
 ---
 
-2. Architectural Principle
+### 2. Architectural Principle
 
 The architecture should follow this rule:
 
+```text
 Artifact SDK
     = shared language and contracts
 
 Host Application
     = behavior and implementation
+```
 
 The SDK should not know what an Errand, Milestone, Review, Project, Delivery, Challenge, or Approval is.
 
@@ -70,13 +92,13 @@ The protocol therefore standardizes structure, while allowing applications to de
 
 ---
 
-3. Language-Neutral Design
+### 3. Language-Neutral Design
 
 TypeScript is used throughout this document as the reference notation because it makes the contracts easy to understand.
 
 TypeScript must not be considered the authoritative implementation.
 
-Eventually the authoritative representation should be a language-neutral schema such as JSON Schema or an equivalent schema format.
+The authoritative representation is a language-neutral schema such as JSON Schema or an equivalent schema format. Language bindings are derived from that canonical representation.
 
 Conceptually:
 
@@ -98,7 +120,9 @@ Changes should originate from the canonical specification and regenerate languag
 
 ---
 
-4. Core Model
+## Part II — Core model
+
+### 4. Core Model
 
 The artifact model must not collapse every concern into one giant record.
 
@@ -156,16 +180,18 @@ The complete conceptual relationship is:
 
 ---
 
-5. Identifier Types
+### 5. Identifier Types
 
 All entity identifiers should be opaque strings.
 
+```typescript
 export type ArtifactId = string;
 export type ArtifactVersionId = string;
 export type ArtifactSpecId = string;
 export type ArtifactLinkId = string;
 export type ArtifactSubmissionId = string;
 export type ArtifactVerificationId = string;
+```
 
 The protocol should not prescribe whether a host uses:
 
@@ -182,7 +208,7 @@ This is also important for offline-first environments, where objects may need ID
 
 ---
 
-6. Protocol Versioning
+### 6. Protocol Versioning
 
 Protocol versioning must be distinguished from artifact-definition, artifact-content,
 and instance-semantic-specification versions.
@@ -201,17 +227,21 @@ ArtifactVersion
 ArtifactSpecification Version
     = revision of the schema that interprets instance semantic data
 
-A base protocol record may eventually expose:
+Every base protocol record exposes:
 
+```typescript
 export interface ArtifactProtocolRecord {
   schemaVersion: string;
 }
+```
 
 Example:
 
+```json
 {
   schemaVersion: "1.1"
 }
+```
 
 Changing an artifact's content must not alter the protocol version.
 
@@ -220,12 +250,13 @@ the protocol version.
 
 ---
 
-7. Actor References
+### 7. Actor References
 
 The Artifact SDK must not depend on a host application's "User" model.
 
 Artifact operations therefore use generic actor references.
 
+```typescript
 export interface ActorReference<
   TType extends string = string
 > {
@@ -235,48 +266,61 @@ export interface ActorReference<
 
   displayName?: string;
 }
+```
 
 Examples:
 
+```typescript
 const githubActor: ActorReference = {
   type: "github_user",
   id: "12345678",
   displayName: "Davy",
 };
+```
 
+```typescript
 const runner: ActorReference = {
   type: "runner",
   id: "runner_123",
 };
+```
 
+```typescript
 const system: ActorReference = {
   type: "system",
 };
+```
 
 The SDK does not interpret these actor types.
 
 ---
 
-8. Artifact Scope
+### 8. Artifact Scope
 
 Artifacts may optionally exist inside a broad application-level scope.
 
+```typescript
 export interface ArtifactScopeReference {
   type: string;
   id: string;
 }
+```
 
 Examples:
 
+```json
 {
   type: "project",
   id: "prj_123"
 }
+```
 
+```json
 {
   type: "errand",
   id: "err_456"
 }
+```
 
 The scope is not the same thing as an "ArtifactLink".
 
@@ -286,7 +330,7 @@ Links describe specific relationships and usages.
 
 ---
 
-9. Artifact Kind vs Artifact Value Type
+### 9. Artifact Kind vs Artifact Value Type
 
 The protocol must distinguish semantic meaning from representation.
 
@@ -322,13 +366,15 @@ Artifact.valueType
 
 ---
 
-10. Artifact Kind
+### 10. Artifact Kind
 
 "kind" represents what the artifact means in the consuming domain.
 
 It should remain open.
 
+```typescript
 export type ArtifactKind = string;
+```
 
 Examples:
 
@@ -350,12 +396,13 @@ Applications own their artifact vocabulary.
 
 ---
 
-11. Artifact Value Type
+### 11. Artifact Value Type
 
 The value type represents the fundamental representation or capability.
 
 This vocabulary should be more standardized.
 
+```typescript
 export type ArtifactValueType =
   | "text"
   | "number"
@@ -374,43 +421,57 @@ export type ArtifactValueType =
   | "reference"
   | "signature"
   | "collection";
+```
 
 Examples:
 
+```json
 {
   kind: "delivery_evidence",
   valueType: "image"
 }
+```
 
+```json
 {
   kind: "implementation",
   valueType: "reference"
 }
+```
 
+```json
 {
   kind: "purchase_receipt",
   valueType: "structured"
 }
+```
 
+```json
 {
   kind: "client_signature",
   valueType: "signature"
 }
+```
 
 ---
 
-12. Artifact
+## Part III — Records, sources, and integrity
+
+### 12. Artifact
 
 "Artifact" represents the logical identity of the thing.
 
 It should not directly contain provider-specific content.
 
+```typescript
 export interface Artifact<
   TKind extends string = string,
   TValueType extends string = ArtifactValueType,
   TSpecification = unknown
 > {
   id: ArtifactId;
+
+  specId: ArtifactSpecId;
 
   scope?: ArtifactScopeReference;
 
@@ -436,6 +497,13 @@ export interface Artifact<
 
   metadata?: ArtifactMetadata;
 }
+```
+
+`specId` is required and is the authoritative link to the `ArtifactSpec` that
+defines the artifact. `kind` and `valueType` remain serialized cached
+projections for efficient consumption, but they must match the selected
+specification. Hosts and editors must change them by selecting a specification,
+not by editing them independently.
 
 An Artifact is the logical object.
 
@@ -450,20 +518,24 @@ an actual artifact. It is distinct from `ArtifactSpec`, which describes an
 expected artifact and policy. Artifact-level specifications describe stable
 logical meaning; version-level specifications describe one content revision.
 
+```typescript
 export interface ArtifactSpecification<T = unknown> {
   schema: string;
   version: number;
   value: T;
 }
+```
 
 ---
 
-13. Artifact Metadata
+### 13. Artifact Metadata
 
 The protocol needs an extension mechanism.
 
+```typescript
 export type ArtifactMetadata =
   Record<string, unknown>;
+```
 
 Metadata should not become a dumping ground.
 
@@ -473,12 +545,13 @@ Use metadata for host extensions and non-core information.
 
 ---
 
-14. ArtifactVersion
+### 14. ArtifactVersion
 
 Artifacts can change over time.
 
 The logical identity should remain stable while physical content changes through versions.
 
+```typescript
 export interface ArtifactVersion {
   id: ArtifactVersionId;
 
@@ -500,6 +573,7 @@ export interface ArtifactVersion {
 
   metadata?: ArtifactMetadata;
 }
+```
 
 Example:
 
@@ -519,12 +593,13 @@ This is critical for immutable approval and evidence history.
 
 ---
 
-15. ArtifactSource
+### 15. ArtifactSource
 
 An "ArtifactSource" describes where the content or reference represented by a particular version comes from.
 
 The core SDK should support broad source categories.
 
+```typescript
 export type ArtifactSource =
   | InlineArtifactSource
   | LocalArtifactSource
@@ -532,13 +607,15 @@ export type ArtifactSource =
   | UrlArtifactSource
   | HostedArtifactSource
   | ProviderArtifactSource;
+```
 
 ---
 
-16. InlineArtifactSource
+### 16. InlineArtifactSource
 
 Inline values are useful for text, structured data, numbers, coordinates, declarations, and similar values.
 
+```typescript
 export interface InlineArtifactSource {
   type: "inline";
 
@@ -546,16 +623,20 @@ export interface InlineArtifactSource {
 
   mediaType?: string;
 }
+```
 
 Example:
 
+```json
 {
   type: "inline",
   value: "Package delivered successfully."
 }
+```
 
 Structured example:
 
+```json
 {
   type: "inline",
   value: {
@@ -565,13 +646,15 @@ Structured example:
     transactionReference: "TX-1289"
   }
 }
+```
 
 ---
 
-17. LocalArtifactSource
+### 17. LocalArtifactSource
 
 Local sources support offline-first systems.
 
+```typescript
 export interface LocalArtifactSource {
   type: "local";
 
@@ -592,6 +675,7 @@ export interface LocalArtifactSource {
 
   remoteVersionId?: ArtifactVersionId;
 }
+```
 
 A host can therefore create artifacts before network upload succeeds.
 
@@ -599,10 +683,11 @@ The Artifact ID remains stable.
 
 ---
 
-18. ObjectArtifactSource
+### 18. ObjectArtifactSource
 
 Uploaded objects should use a storage-neutral representation.
 
+```typescript
 export interface ObjectArtifactSource {
   type: "object";
 
@@ -616,6 +701,7 @@ export interface ObjectArtifactSource {
 
   storageProvider?: string;
 }
+```
 
 The SDK should not assume:
 
@@ -629,10 +715,11 @@ The host decides how "objectId" maps to physical storage.
 
 ---
 
-19. UrlArtifactSource
+### 19. UrlArtifactSource
 
 External web resources can be represented as URLs.
 
+```typescript
 export interface UrlArtifactSource {
   type: "url";
 
@@ -642,6 +729,7 @@ export interface UrlArtifactSource {
 
   mediaType?: string;
 }
+```
 
 Possible examples:
 
@@ -655,10 +743,11 @@ Possible examples:
 
 ---
 
-20. HostedArtifactSource
+### 20. HostedArtifactSource
 
 A host application may manage some artifacts internally.
 
+```typescript
 export interface HostedArtifactSource {
   type: "hosted";
 
@@ -666,23 +755,27 @@ export interface HostedArtifactSource {
 
   recordId: string;
 }
+```
 
 Example:
 
+```json
 {
   type: "hosted",
   recordType: "generated_report",
   recordId: "report_983"
 }
+```
 
 ---
 
-21. ProviderArtifactSource
+### 21. ProviderArtifactSource
 
 External providers should not be hardcoded into the global SDK.
 
 The protocol should expose a generic provider source.
 
+```typescript
 export interface ProviderArtifactSource<
   TProvider extends string = string,
   TReference = unknown
@@ -693,15 +786,17 @@ export interface ProviderArtifactSource<
 
   reference: TReference;
 }
+```
 
 Provider-specific packages can define strong reference types.
 
 ---
 
-22. GitHub Provider Example
+### 22. GitHub Provider Example
 
 A GitHub extension could define:
 
+```typescript
 export type GitHubArtifactReference =
   | GitHubPullRequestReference
   | GitHubCommitReference
@@ -710,9 +805,11 @@ export type GitHubArtifactReference =
   | GitHubDeploymentReference
   | GitHubWorkflowRunReference
   | GitHubCheckRunReference;
+```
 
 Pull request:
 
+```typescript
 export interface GitHubPullRequestReference {
   resource: "pull_request";
 
@@ -722,9 +819,11 @@ export interface GitHubPullRequestReference {
 
   nodeId?: string;
 }
+```
 
 Commit:
 
+```typescript
 export interface GitHubCommitReference {
   resource: "commit";
 
@@ -732,9 +831,11 @@ export interface GitHubCommitReference {
 
   sha: string;
 }
+```
 
 Issue:
 
+```typescript
 export interface GitHubIssueReference {
   resource: "issue";
 
@@ -744,9 +845,11 @@ export interface GitHubIssueReference {
 
   nodeId?: string;
 }
+```
 
 Usage:
 
+```typescript
 const source: ProviderArtifactSource<
   "github",
   GitHubArtifactReference
@@ -761,6 +864,7 @@ const source: ProviderArtifactSource<
     number: 57,
   },
 };
+```
 
 GitLab support should not require modifying the Artifact core specification.
 
@@ -768,15 +872,18 @@ A GitLab extension should simply define another provider-reference contract.
 
 ---
 
-23. ArtifactIntegrity
+### 23. ArtifactIntegrity
 
 Artifacts used as evidence may require proof that their content has not changed.
 
+```typescript
 export type ArtifactIntegrityAlgorithm =
   | "sha256"
   | "sha384"
   | "sha512";
+```
 
+```typescript
 export interface ArtifactIntegrity {
   algorithm: ArtifactIntegrityAlgorithm;
 
@@ -786,6 +893,7 @@ export interface ArtifactIntegrity {
 
   verifiedAt?: string;
 }
+```
 
 Integrity is especially important for:
 
@@ -803,7 +911,9 @@ Approval of an artifact version should refer to exact content, not merely a muta
 
 ---
 
-24. ArtifactLink
+## Part IV — Relationships
+
+### 24. ArtifactLink
 
 Being evidence, a deliverable, an attachment, or review material is not an intrinsic property of an artifact.
 
@@ -811,6 +921,7 @@ It is a relationship.
 
 The SDK therefore uses "ArtifactLink".
 
+```typescript
 export interface ArtifactLink<
   TRole extends string = string,
   TSubjectType extends string = string
@@ -833,6 +944,7 @@ export interface ArtifactLink<
 
   metadata?: ArtifactMetadata;
 }
+```
 
 An ArtifactLink may optionally pin a specific version.
 
@@ -842,12 +954,13 @@ If a version is specified, the relationship refers to that exact content revisio
 
 ---
 
-25. ArtifactSubjectReference
+### 25. ArtifactSubjectReference
 
 The Artifact SDK must not contain application-specific subject unions.
 
 Instead:
 
+```typescript
 export interface ArtifactSubjectReference<
   TType extends string = string
 > {
@@ -857,9 +970,11 @@ export interface ArtifactSubjectReference<
 
   scope?: Record<string, string>;
 }
+```
 
 Project Manager may define:
 
+```typescript
 export type ProjectArtifactSubjectType =
   | "project"
   | "version"
@@ -874,9 +989,11 @@ export type ProjectArtifactSubjectType =
   | "discussion_message"
   | "meeting"
   | "contract";
+```
 
 Errands may define:
 
+```typescript
 export type ErrandsArtifactSubjectType =
   | "errand"
   | "assignment"
@@ -884,19 +1001,23 @@ export type ErrandsArtifactSubjectType =
   | "completion"
   | "dispute"
   | "payment";
+```
 
 The global Artifact SDK needs to understand neither list.
 
 ---
 
-26. Artifact Role
+### 26. Artifact Role
 
 Artifact roles should also remain extensible.
 
+```typescript
 export type ArtifactRole = string;
+```
 
 Project Manager may define:
 
+```typescript
 export type ProjectArtifactRole =
   | "implementation"
   | "deliverable"
@@ -910,15 +1031,18 @@ export type ProjectArtifactRole =
   | "handover"
   | "attachment"
   | "reference";
+```
 
 Errands might define:
 
+```typescript
 export type ErrandsArtifactRole =
   | "delivery_evidence"
   | "completion_evidence"
   | "purchase_evidence"
   | "dispute_evidence"
   | "identity_evidence";
+```
 
 The principle is:
 
@@ -926,7 +1050,7 @@ The principle is:
 
 ---
 
-27. Example of Artifact Reuse
+### 27. Example of Artifact Reuse
 
 Suppose a video exists once:
 
@@ -934,8 +1058,11 @@ Authentication demonstration
 
 It may have one Artifact:
 
+```typescript
 const artifact: Artifact = {
   id: "art_auth_demo",
+
+  specId: "artspec_authentication_demo",
 
   scope: {
     type: "project",
@@ -956,9 +1083,11 @@ const artifact: Artifact = {
 
   updatedAt: now,
 };
+```
 
 It can then have multiple links:
 
+```typescript
 const deliverableLink: ArtifactLink = {
   id: "alink_1",
 
@@ -977,7 +1106,9 @@ const deliverableLink: ArtifactLink = {
 
   createdAt: now,
 };
+```
 
+```typescript
 const criterionLink: ArtifactLink = {
   id: "alink_2",
 
@@ -996,7 +1127,9 @@ const criterionLink: ArtifactLink = {
 
   createdAt: now,
 };
+```
 
+```typescript
 const reviewLink: ArtifactLink = {
   id: "alink_3",
 
@@ -1015,12 +1148,15 @@ const reviewLink: ArtifactLink = {
 
   createdAt: now,
 };
+```
 
 The artifact does not change because its context changes.
 
 ---
 
-28. ArtifactSpec
+## Part V — Specifications and policies
+
+### 28. ArtifactSpec
 
 Some applications need to declare what artifacts are expected before an actual artifact exists.
 
@@ -1028,6 +1164,7 @@ This concept comes from workflow-driven systems such as Errands.
 
 The global protocol should model that separately as "ArtifactSpec".
 
+```typescript
 export interface ArtifactSpec<
   TKind extends string = string,
   TValueType extends string = ArtifactValueType,
@@ -1069,14 +1206,32 @@ export interface ArtifactSpec<
 
   metadata?: ArtifactMetadata;
 }
+```
 
 "ArtifactSpec" is not an Artifact.
 
 It describes what an expected artifact should look like and the policies governing it.
 
+#### Policy responsibility boundaries
+
+The properties of an `ArtifactSpec` have deliberately separate responsibilities:
+
+| Property | Responsibility |
+| --- | --- |
+| `kind`, `valueType` | The semantic meaning and fundamental representation expected by the host. |
+| `config` | Representation-specific shape and constraints, such as image count, text length, or collection item schema. |
+| `validation` | Declarative checks a host applies when accepting a value or version, including host-defined validation rules. |
+| `provider`, `requirement`, `lifecycle` | Who supplies the artifact, whether it is required, and when the host permits it to change. |
+| `access`, `privacy`, `verification`, `retention` | Governance of access, disclosure, trust, and preservation. |
+| `presentation` | Optional UI hints that do not affect protocol validity. |
+
+`config` must not become a second policy bag. A host-specific rule belongs in its
+dedicated policy when one exists; `metadata` remains the extension point for
+non-interoperable information.
+
 ---
 
-29. ArtifactSpecSnapshot
+### 29. ArtifactSpecSnapshot
 
 Definitions can evolve.
 
@@ -1084,6 +1239,7 @@ A running task or workflow should not silently change because an administrator e
 
 Therefore specifications need immutable snapshots.
 
+```typescript
 export interface ArtifactSpecSnapshot<
   TKind extends string = string,
   TValueType extends string = ArtifactValueType,
@@ -1125,6 +1281,7 @@ export interface ArtifactSpecSnapshot<
 
   metadata?: ArtifactMetadata;
 }
+```
 
 Example:
 
@@ -1146,14 +1303,17 @@ Existing workflows based on v3 must continue using the v3 snapshot.
 
 ---
 
-30. ArtifactProviderPolicy
+### 30. ArtifactProviderPolicy
 
 Provider policy answers:
 
 «Who is expected to supply this artifact?»
 
-It must not be confused with a storage/provider source.
+It must not be confused with `ProviderArtifactSource`: this policy identifies
+the host-defined actor category expected to supply an artifact, whereas a
+provider source identifies the external system from which a version originates.
 
+```typescript
 export interface ArtifactProviderPolicy {
   actors: string[];
 
@@ -1161,26 +1321,31 @@ export interface ArtifactProviderPolicy {
 
   delegation?: "forbidden" | "allowed";
 }
+```
 
 Example:
 
+```json
 {
   actors: ["runner"],
   mode: "single"
 }
+```
 
 Another application:
 
+```json
 {
   actors: ["developer", "designer"],
   mode: "any"
 }
+```
 
 Actor identifiers remain host-defined.
 
 ---
 
-31. ArtifactRequirementPolicy
+### 31. ArtifactRequirementPolicy
 
 Requiredness should not be reduced to:
 
@@ -1188,6 +1353,7 @@ required: true
 
 because workflow-oriented systems need to know what an artifact requirement blocks.
 
+```typescript
 export interface ArtifactRequirementPolicy {
   mode:
     | "required"
@@ -1198,9 +1364,11 @@ export interface ArtifactRequirementPolicy {
 
   blocks?: string[];
 }
+```
 
 Example:
 
+```json
 {
   mode: "required",
 
@@ -1208,9 +1376,11 @@ Example:
     "submit_completion"
   ]
 }
+```
 
 Project Manager might instead define:
 
+```json
 {
   mode: "required",
 
@@ -1218,15 +1388,17 @@ Project Manager might instead define:
     "request_milestone_approval"
   ]
 }
+```
 
 The operation identifiers remain domain-specific strings.
 
 ---
 
-32. ArtifactLifecyclePolicy
+### 32. ArtifactLifecyclePolicy
 
 Lifecycle policy defines when an artifact may exist or change.
 
+```typescript
 export interface ArtifactLifecyclePolicy {
   createAt?: string;
 
@@ -1240,9 +1412,11 @@ export interface ArtifactLifecyclePolicy {
 
   condition?: ArtifactCondition;
 }
+```
 
 Errands example:
 
+```json
 {
   createAt: "accepted",
 
@@ -1257,9 +1431,11 @@ Errands example:
 
   lockAt: "completion_submitted"
 }
+```
 
 Project Manager example:
 
+```json
 {
   createAt: "active",
 
@@ -1274,12 +1450,17 @@ Project Manager example:
 
   lockAt: "approved"
 }
+```
 
 The SDK does not interpret these stage names globally.
 
+Each host must document the state namespace and the meaning of its stage values.
+Lifecycle policies constrain artifact operations; they do not themselves create
+or transition host workflow state.
+
 ---
 
-33. ArtifactCondition
+### 33. ArtifactCondition
 
 Conditions must be language-neutral and serializable.
 
@@ -1287,6 +1468,7 @@ Never encode policies using language-specific callbacks.
 
 Do not do:
 
+```typescript
 condition: ctx => ctx.task.status === "accepted"
 
 Instead, conditions should form a declarative AST.
@@ -1299,11 +1481,13 @@ export type ArtifactCondition =
   | ArtifactAndCondition
   | ArtifactOrCondition
   | ArtifactNotCondition;
+```
 
 ---
 
-34. State Condition
+### 34. State Condition
 
+```typescript
 export interface ArtifactStateCondition {
   kind: "state";
 
@@ -1311,9 +1495,11 @@ export interface ArtifactStateCondition {
 
   in: string[];
 }
+```
 
 Example:
 
+```json
 {
   kind: "state",
 
@@ -1324,42 +1510,54 @@ Example:
     "in_progress"
   ]
 }
+```
 
 ---
 
-35. Actor Condition
+### 35. Actor Condition
 
+```typescript
 export interface ArtifactActorCondition {
   kind: "actor";
 
   in: string[];
 }
+```
 
 Example:
 
+```json
 {
   kind: "actor",
   in: ["runner", "admin"]
 }
+```
 
 ---
 
-36. Artifact Exists Condition
+### 36. Artifact Exists Condition
 
+```typescript
 export interface ArtifactExistsCondition {
   kind: "artifact_exists";
 
   artifact: string;
 }
+```
 
 The artifact reference may correspond to a spec key, artifact key, or another host-defined identifier.
 
 The exact resolution rule should be documented by the protocol or extension layer.
 
+A core implementation must therefore treat this value as an opaque reference.
+An extension or host policy must define whether it resolves, for example, by
+spec key, artifact key, logical artifact ID, or another namespace.
+
 ---
 
-37. Artifact Value Condition
+### 37. Artifact Value Condition
 
+```typescript
 export interface ArtifactValueCondition {
   kind: "artifact_value";
 
@@ -1377,9 +1575,11 @@ export interface ArtifactValueCondition {
 
   value: unknown;
 }
+```
 
 Example:
 
+```json
 {
   kind: "artifact_value",
 
@@ -1389,31 +1589,39 @@ Example:
 
   value: true
 }
+```
 
 ---
 
-38. Logical Conditions
+### 38. Logical Conditions
 
+```typescript
 export interface ArtifactAndCondition {
   kind: "and";
 
   conditions: ArtifactCondition[];
 }
+```
 
+```typescript
 export interface ArtifactOrCondition {
   kind: "or";
 
   conditions: ArtifactCondition[];
 }
+```
 
+```typescript
 export interface ArtifactNotCondition {
   kind: "not";
 
   condition: ArtifactCondition;
 }
+```
 
 Example:
 
+```typescript
 const condition: ArtifactCondition = {
   kind: "and",
 
@@ -1431,15 +1639,17 @@ const condition: ArtifactCondition = {
     },
   ],
 };
+```
 
 This is safely serializable to JSON and interpretable in any implementation language.
 
 ---
 
-39. ArtifactAccessPolicy
+### 39. ArtifactAccessPolicy
 
 Access rules should remain distinct from privacy rules.
 
+```typescript
 export interface ArtifactAccessPolicy {
   read?: ArtifactAccessRule[];
 
@@ -1449,15 +1659,23 @@ export interface ArtifactAccessPolicy {
 
   verify?: ArtifactAccessRule[];
 }
+```
 
+```typescript
 export interface ArtifactAccessRule {
   actors: string[];
 
   condition?: ArtifactCondition;
 }
+```
+
+The protocol declares access intent but does not prescribe authorization
+semantics. Hosts must define their default decision, how multiple matching rules
+combine, and how access rules interact with privacy representation rules.
 
 Example:
 
+```json
 {
   read: [
     {
@@ -1473,10 +1691,11 @@ Example:
     }
   ]
 }
+```
 
 ---
 
-40. ArtifactPrivacyPolicy
+### 40. ArtifactPrivacyPolicy
 
 Access asks:
 
@@ -1486,6 +1705,7 @@ Privacy asks:
 
 «What representation of the artifact is this actor allowed to receive?»
 
+```typescript
 export interface ArtifactPrivacyPolicy {
   classification:
     | "public"
@@ -1500,11 +1720,13 @@ export interface ArtifactPrivacyPolicy {
 
   encryption?: ArtifactEncryptionPolicy;
 }
+```
 
 ---
 
-41. ArtifactRevealRule
+### 41. ArtifactRevealRule
 
+```typescript
 export interface ArtifactRevealRule {
   actors: string[];
 
@@ -1516,11 +1738,17 @@ export interface ArtifactRevealRule {
     | "approximate"
     | "full";
 }
+```
 
 This supports progressive disclosure.
 
+When several reveal rules match, the host must apply a documented precedence
+rule. In the absence of an applicable rule, the host must use its documented
+default representation; the core protocol does not select one.
+
 For example, a runner may see an approximate destination before accepting a job:
 
+```json
 {
   actors: ["runner"],
 
@@ -1532,9 +1760,11 @@ For example, a runner may see an approximate destination before accepting a job:
 
   representation: "approximate"
 }
+```
 
 After acceptance:
 
+```json
 {
   actors: ["runner"],
 
@@ -1546,18 +1776,21 @@ After acceptance:
 
   representation: "full"
 }
+```
 
 ---
 
-42. ArtifactMaskingPolicy
+### 42. ArtifactMaskingPolicy
 
 A basic extensible form could be:
 
+```typescript
 export interface ArtifactMaskingPolicy {
   strategy: string;
 
   config?: Record<string, unknown>;
 }
+```
 
 Potential future strategies:
 
@@ -1573,10 +1806,11 @@ The exact standardized strategies can evolve later.
 
 ---
 
-43. ArtifactEncryptionPolicy
+### 43. ArtifactEncryptionPolicy
 
 The protocol may describe encryption expectations without implementing encryption itself.
 
+```typescript
 export interface ArtifactEncryptionPolicy {
   required: boolean;
 
@@ -1584,17 +1818,21 @@ export interface ArtifactEncryptionPolicy {
 
   keyScope?: string;
 }
+```
 
 The host decides how actual encryption is performed.
 
 ---
 
-44. ArtifactSubmission
+## Part VI — Runtime records
+
+### 44. ArtifactSubmission
 
 Artifact values should not necessarily be silently overwritten.
 
 Operational submission history should be first-class.
 
+```typescript
 export interface ArtifactSubmission<
   TValue = unknown
 > {
@@ -1614,11 +1852,19 @@ export interface ArtifactSubmission<
 
   metadata?: ArtifactMetadata;
 }
+```
+
+A submission is operational history, not automatically a new content revision.
+It may point at an immutable `ArtifactVersion`, contain a proposed value for a
+host to process, or both. When a host treats submitted content as evidence or
+otherwise needs historical immutability, it must create and reference an
+`ArtifactVersion`.
 
 ---
 
-45. ArtifactSubmissionContext
+### 45. ArtifactSubmissionContext
 
+```typescript
 export interface ArtifactSubmissionContext {
   latitude?: number;
 
@@ -1630,6 +1876,7 @@ export interface ArtifactSubmissionContext {
 
   userAgent?: string;
 }
+```
 
 This supports evidence-sensitive workflows where submission provenance matters.
 
@@ -1639,7 +1886,7 @@ The host decides which values are safe and legal to collect.
 
 ---
 
-46. ArtifactVerification
+### 46. ArtifactVerification
 
 Verification must not be represented as:
 
@@ -1647,6 +1894,7 @@ verified: true
 
 Verification is an event/record with provenance.
 
+```typescript
 export interface ArtifactVerification {
   id: ArtifactVerificationId;
 
@@ -1674,6 +1922,7 @@ export interface ArtifactVerification {
 
   metadata?: ArtifactMetadata;
 }
+```
 
 Methods remain extensible.
 
@@ -1690,10 +1939,11 @@ human_review
 
 ---
 
-47. ArtifactVerificationPolicy
+### 47. ArtifactVerificationPolicy
 
 Artifact specifications may define verification requirements.
 
+```typescript
 export interface ArtifactVerificationPolicy {
   required: boolean;
 
@@ -1703,9 +1953,11 @@ export interface ArtifactVerificationPolicy {
 
   condition?: ArtifactCondition;
 }
+```
 
 Example:
 
+```json
 {
   required: true,
 
@@ -1719,29 +1971,67 @@ Example:
     "platform"
   ]
 }
+```
 
 The policy describes what is expected.
 
 "ArtifactVerification" records what actually happened.
 
+When `condition` is present, the host evaluates it before applying the policy.
+If it evaluates to false, this verification policy does not apply for that
+context; the host still records any verification events it performs.
+
 ---
 
-48. ArtifactValidationPolicy
+### 48. ArtifactValidationPolicy
 
+```typescript
 export interface ArtifactValidationPolicy {
   mode?: "strict" | "lenient";
 
+  schema?: ArtifactValidationSchema;
+
   rules?: ArtifactValidationRule[];
 }
+```
 
+`schema` is a serializable Laravel-style rule map applied to the semantic value
+inside `Artifact.specification` or `ArtifactVersion.specification`. It does not
+validate the specification envelope (`schema` and `version`) or the physical
+`ArtifactSource`.
+
+```typescript
+export type ArtifactValidationSchema = Record<string, string | string[]>;
+```
+
+The rule-map keys are exact field paths, including nested paths such as
+`locations.name`. A value may be a pipe-form rule string or Bunwire's canonical
+array form:
+
+```typescript
+const policy = {
+  schema: {
+    locations: "required|object",
+    "locations.name": ["required", "string"],
+  },
+};
+```
+
+The host selects the applicable specification context and invokes Bunwire (or a
+semantically equivalent implementation). Wildcards, executable callbacks, and
+language-specific rule objects are not serialized in the protocol.
+
+```typescript
 export interface ArtifactValidationRule {
   type: string;
 
   config?: Record<string, unknown>;
 }
+```
 
 Example:
 
+```json
 {
   type: "file_count",
 
@@ -1750,9 +2040,11 @@ Example:
     max: 4
   }
 }
+```
 
 Another:
 
+```json
 {
   type: "mime_type",
 
@@ -1763,19 +2055,22 @@ Another:
     ]
   }
 }
+```
 
 The protocol may later standardize common validation-rule identifiers.
 
 ---
 
-49. ArtifactRetentionPolicy
+### 49. ArtifactRetentionPolicy
 
 Retention should describe expectations, not storage implementation.
 
+```typescript
 export type ArtifactRetentionPolicy =
   | {
       policy: "forever";
     }
+```
   | {
       policy: "duration";
       days: number;
@@ -1791,17 +2086,20 @@ export type ArtifactRetentionPolicy =
 
 Example:
 
+```json
 {
   policy: "duration",
   days: 365
 }
+```
 
 ---
 
-50. ArtifactPresentationPolicy
+### 50. ArtifactPresentationPolicy
 
 Presentation hints can exist without coupling the SDK to a UI framework.
 
+```typescript
 export interface ArtifactPresentationPolicy {
   label?: string;
 
@@ -1813,6 +2111,7 @@ export interface ArtifactPresentationPolicy {
 
   config?: Record<string, unknown>;
 }
+```
 
 These should remain hints only.
 
@@ -1822,12 +2121,17 @@ The protocol must never depend on React, Vue, Flutter, SwiftUI, or another prese
 
 ---
 
-51. Artifact Value Schemas
+### 51. Artifact Value Schemas
 
 Value-type-specific schemas can add stronger typing and interoperable constraints.
 
+The following are illustrative value schemas. The canonical schema and generated
+bindings define representation-specific schemas for every standardized
+`ArtifactValueType`.
+
 Example image schema:
 
+```typescript
 export interface ImageArtifactValueSchema {
   valueType: "image";
 
@@ -1843,9 +2147,11 @@ export interface ImageArtifactValueSchema {
 
   requireLocation?: boolean;
 }
+```
 
 Location:
 
+```typescript
 export interface LocationArtifactValueSchema {
   valueType: "location";
 
@@ -1858,9 +2164,11 @@ export interface LocationArtifactValueSchema {
 
   allowManualEntry?: boolean;
 }
+```
 
 Text:
 
+```typescript
 export interface TextArtifactValueSchema {
   valueType: "text";
 
@@ -1872,9 +2180,11 @@ export interface TextArtifactValueSchema {
 
   pattern?: string;
 }
+```
 
 File:
 
+```typescript
 export interface FileArtifactValueSchema {
   valueType: "file";
 
@@ -1886,9 +2196,11 @@ export interface FileArtifactValueSchema {
 
   maxSizeBytes?: number;
 }
+```
 
 Collection:
 
+```typescript
 export interface CollectionArtifactValueSchema {
   valueType: "collection";
 
@@ -1898,26 +2210,31 @@ export interface CollectionArtifactValueSchema {
 
   maxItems?: number;
 }
+```
 
-Eventually:
+The value-schema union is extended as standardized value types gain their own
+constraints:
 
+```typescript
 export type ArtifactValueSchema =
   | ImageArtifactValueSchema
   | LocationArtifactValueSchema
   | TextArtifactValueSchema
   | FileArtifactValueSchema
   | CollectionArtifactValueSchema;
+```
 
 Additional value types can be introduced over time.
 
 ---
 
-52. ArtifactRequirement
+### 52. ArtifactRequirement
 
 Some domain objects may require artifacts without owning a full ArtifactSpec.
 
 A generic requirement model can represent this.
 
+```typescript
 export interface ArtifactRequirement {
   id: string;
 
@@ -1937,9 +2254,11 @@ export interface ArtifactRequirement {
 
   metadata?: ArtifactMetadata;
 }
+```
 
 Example:
 
+```typescript
 const requirement: ArtifactRequirement = {
   id: "req_demo",
 
@@ -1956,19 +2275,25 @@ const requirement: ArtifactRequirement = {
 
   required: true,
 };
+```
 
 A project-management deliverable can use this without making the Artifact itself aware that it is a deliverable.
 
 ---
 
-53. Project Manager Example
+## Part VII — Cross-host examples
+
+### 53. Project Manager Example
 
 A developer submits a GitHub pull request.
 
 Artifact:
 
+```typescript
 const artifact: Artifact = {
   id: "art_auth_impl",
+
+  specId: "artspec_authentication_implementation",
 
   scope: {
     type: "project",
@@ -1992,9 +2317,11 @@ const artifact: Artifact = {
 
   updatedAt: "2026-08-15T09:00:00Z",
 };
+```
 
 Version:
 
+```typescript
 const version: ArtifactVersion = {
   id: "artver_auth_impl_1",
 
@@ -2021,9 +2348,11 @@ const version: ArtifactVersion = {
 
   createdAt: "2026-08-15T09:00:00Z",
 };
+```
 
 Deliverable relationship:
 
+```typescript
 const deliverableLink: ArtifactLink = {
   id: "alink_deliverable",
 
@@ -2042,9 +2371,11 @@ const deliverableLink: ArtifactLink = {
 
   createdAt: now,
 };
+```
 
 Review relationship:
 
+```typescript
 const reviewLink: ArtifactLink = {
   id: "alink_review",
 
@@ -2063,17 +2394,19 @@ const reviewLink: ArtifactLink = {
 
   createdAt: now,
 };
+```
 
 The same artifact participates in multiple contexts without duplication.
 
 ---
 
-54. Errands Example
+### 54. Errands Example
 
 An Errands workflow requires delivery photographic evidence.
 
 Specification:
 
+```typescript
 const deliveryEvidenceSpec: ArtifactSpec = {
   id: "artspec_delivery_evidence",
 
@@ -2180,11 +2513,15 @@ const deliveryEvidenceSpec: ArtifactSpec = {
     days: 365
   }
 };
+```
 
 Actual artifact:
 
+```typescript
 const artifact: Artifact = {
   id: "art_delivery_1",
+
+  specId: "artspec_delivery_evidence",
 
   scope: {
     type: "errand",
@@ -2208,9 +2545,11 @@ const artifact: Artifact = {
 
   updatedAt: now,
 };
+```
 
 Artifact version:
 
+```typescript
 const version: ArtifactVersion = {
   id: "artver_delivery_1",
 
@@ -2245,9 +2584,11 @@ const version: ArtifactVersion = {
 
   createdAt: now,
 };
+```
 
 Submission:
 
+```typescript
 const submission: ArtifactSubmission = {
   id: "sub_1",
 
@@ -2267,9 +2608,11 @@ const submission: ArtifactSubmission = {
     longitude: 3.3792,
   },
 };
+```
 
 Verification:
 
+```typescript
 const verification: ArtifactVerification = {
   id: "ver_1",
 
@@ -2292,12 +2635,15 @@ const verification: ArtifactVerification = {
 
   verifiedAt: now,
 };
+```
 
 This proves that two fundamentally different applications can use the same artifact vocabulary.
 
 ---
 
-55. What the SDK Must Not Implement
+## Part VIII — Protocol operation and evolution
+
+### 55. What the SDK Must Not Implement
 
 The core SDK must not implement application behavior.
 
@@ -2327,23 +2673,27 @@ The host executes them.
 
 ---
 
-56. Optional SDK Utilities
+### 56. Optional SDK Utilities
 
 Language bindings may eventually provide deterministic helper utilities.
 
 Examples:
 
+```typescript
 export function isArtifactArchived(
   artifact: Artifact
 ): boolean {
   return artifact.archivedAt !== undefined;
 }
+```
 
+```typescript
 export function isVersionPinned(
   link: ArtifactLink
 ): boolean {
   return link.artifactVersionId !== undefined;
 }
+```
 
 Potential helpers include:
 
@@ -2356,13 +2706,24 @@ Potential helpers include:
 - condition-AST parsing;
 - safe discriminated-union helpers.
 
+The TypeScript package may also provide small programmatic editors for generic
+artifact and specification content:
+
+- `ArtifactEditor`;
+- `ArtifactSpecEditor`; and
+- shared callback transactions with local undo/redo history.
+
+These editors operate on in-memory protocol data only. They do not persist
+changes, execute validation policies, advance specification versions, publish
+definitions, or implement host workflows.
+
 These utilities are optional conveniences.
 
 They must not turn the SDK into a host-specific runtime.
 
 ---
 
-57. Open vs Closed Vocabularies
+### 57. Open vs Closed Vocabularies
 
 The protocol must deliberately distinguish standardized concepts from extensible application concepts.
 
@@ -2393,9 +2754,10 @@ This prevents the Artifact SDK from becoming a catalogue of every possible busin
 
 ---
 
-58. Extension Packages
+### 58. Extension Packages
 
-Provider or domain-specific contracts should eventually be separable.
+Provider and domain-specific contracts are separate from the core protocol. The
+GitHub extension is the first implementation of this boundary.
 
 Potential structure:
 
@@ -2423,13 +2785,14 @@ The Artifact core should remain provider-neutral.
 
 ---
 
-59. Suggested Repository Structure
+### 59. Current repository layout
 
-An initial repository could look like:
+The repository is currently organised around the following protocol boundaries:
 
+```text
 artifacts/
 ├── README.md
-├── Go.md
+├── GOAL.md
 ├── LICENSE
 │
 ├── spec/
@@ -2438,6 +2801,7 @@ artifacts/
 │   │
 │   ├── artifact/
 │   │   ├── artifact.schema.json
+│   │   ├── artifact-specification.schema.json
 │   │   ├── artifact-version.schema.json
 │   │   ├── artifact-source.schema.json
 │   │   ├── artifact-integrity.schema.json
@@ -2445,6 +2809,7 @@ artifacts/
 │   │
 │   ├── specification/
 │   │   ├── artifact-spec.schema.json
+│   │   ├── artifact-spec-snapshot.schema.json
 │   │   ├── artifact-requirement.schema.json
 │   │   └── artifact-value-schema.schema.json
 │   │
@@ -2457,7 +2822,8 @@ artifacts/
 │   │   ├── privacy-policy.schema.json
 │   │   ├── validation-policy.schema.json
 │   │   ├── verification-policy.schema.json
-│   │   └── retention-policy.schema.json
+│   │   ├── retention-policy.schema.json
+│   │   └── presentation-policy.schema.json
 │   │
 │   └── runtime/
 │       ├── submission.schema.json
@@ -2468,12 +2834,18 @@ artifacts/
 │   ├── php/
 │   └── go/
 │
+├── extensions/
+│   └── github/
+│
 ├── generators/
+├── scripts/
 │
 ├── tests/
 │   ├── fixtures/
 │   ├── conformance/
-│   └── compatibility/
+│   ├── generator/
+│   ├── php/
+│   └── typescript/
 │
 └── docs/
     ├── architecture.md
@@ -2484,23 +2856,27 @@ artifacts/
     └── examples/
         ├── errands.md
         └── project-manager.md
+```
 
 The exact repository structure may change, but the conceptual boundaries should remain.
 
 ---
 
-60. Conformance Fixtures
+### 60. Conformance Fixtures
 
-Because multiple languages will implement the protocol, the repository should eventually include canonical JSON fixtures.
+The repository contains canonical JSON fixtures used by the conformance suite
+and language-package tests.
 
 Example:
 
+```text
 tests/fixtures/artifact/basic.json
 tests/fixtures/artifact/versioned-file.json
 tests/fixtures/artifact/github-reference.json
 tests/fixtures/spec/delivery-evidence.json
 tests/fixtures/submission/delivery-photo.json
 tests/fixtures/verification/client-confirmation.json
+```
 
 All generated or manually implemented language SDKs should be able to deserialize and validate the same fixtures.
 
@@ -2508,12 +2884,13 @@ This gives the project actual cross-language conformance rather than merely simi
 
 ---
 
-61. Serialization Rules
+### 61. Serialization Rules
 
 Serialized forms should use stable discriminators.
 
 For example:
 
+```json
 {
   "type": "provider",
   "provider": "github",
@@ -2523,14 +2900,15 @@ For example:
     "number": 55
   }
 }
+```
 
 Avoid representations whose meaning depends on language-specific class names.
 
-Dates should use interoperable formats such as ISO 8601 strings unless the protocol later defines another canonical representation.
+Dates use the canonical RFC 3339 date-time representation defined by the protocol schema. Producers should emit UTC where practical.
 
 Optional fields should have clear missing/null semantics.
 
-The specification should eventually explicitly define:
+The canonical schemas and serialization guidance define:
 
 - whether absent and "null" mean the same thing;
 - number precision expectations;
@@ -2542,7 +2920,7 @@ The specification should eventually explicitly define:
 
 ---
 
-62. Forward Compatibility
+### 62. Forward Compatibility
 
 The protocol should be designed so future SDKs can safely encounter records created by newer versions.
 
@@ -2557,15 +2935,17 @@ Breaking structural changes should require a protocol-major-version change.
 
 ---
 
-63. Security Boundary
+### 63. Security Boundary
 
 The Artifact SDK describes security-related intent but must not create false guarantees.
 
 For example:
 
+```json
 privacy: {
   classification: "restricted"
 }
+```
 
 does not itself make content restricted.
 
@@ -2573,9 +2953,11 @@ The host must enforce the policy.
 
 Likewise:
 
+```json
 encryption: {
   required: true
 }
+```
 
 does not encrypt anything.
 
@@ -2587,9 +2969,12 @@ This distinction must remain clear throughout the SDK.
 
 ---
 
-64. Initial Implementation Priorities
+### 64. Implementation status and extension priorities
 
-The initial implementation should focus on the stable shared core before attempting advanced runtime policy evaluation.
+The repository now contains the stable shared core, canonical schemas,
+generated TypeScript/PHP/Go bindings, conformance fixtures, and an initial
+GitHub extension. The staged order below remains the required order for new
+protocol work and for implementations in another language.
 
 Recommended order:
 
@@ -2655,7 +3040,7 @@ ArtifactVerificationPolicy
 ArtifactRetentionPolicy
 ArtifactPresentationPolicy
 
-The first iteration does not require a full policy engine.
+The protocol does not require a full policy engine.
 
 The schema can exist before every language provides evaluators.
 
@@ -2677,7 +3062,7 @@ Each language must conform to the same fixtures.
 
 Phase 6 — Provider Extensions
 
-Start with providers that are actually needed.
+Add providers only when they are actually needed.
 
 For example:
 
@@ -2689,23 +3074,25 @@ Provider extensions should prove the extension mechanism rather than expand the 
 
 ---
 
-65. Primary Design Rules for Implementers
+## Part IX — Implementer reference
+
+### 65. Primary Design Rules for Implementers
 
 The implementation should preserve these rules.
 
-Rule 1
+#### Rule 1 — Separate identity from content
 
 Artifact identity must remain separate from artifact content.
 
 Artifact != ArtifactVersion
 
-Rule 2
+#### Rule 2 — Keep physical references in sources
 
 Provider-specific physical references belong to ArtifactSource.
 
 ArtifactVersion → ArtifactSource
 
-Rule 3
+#### Rule 3 — Model usage as a relationship
 
 Usage is a relationship.
 
@@ -2720,25 +3107,25 @@ to Artifact.
 
 Use ArtifactLink.
 
-Rule 4
+#### Rule 4 — Support version pinning
 
 Version-sensitive relationships must support version pinning.
 
 Approval of v3 must not automatically apply to v4.
 
-Rule 5
+#### Rule 5 — Keep definitions separate from artifacts
 
 Artifact specifications are not actual artifacts.
 
 ArtifactSpec != Artifact
 
-Rule 6
+#### Rule 6 — Keep definitions serializable
 
 Definitions must be serializable.
 
 Do not store executable callbacks in ArtifactSpec or policy definitions.
 
-Rule 7
+#### Rule 7 — Preserve extensible vocabulary
 
 Domain vocabulary remains extensible.
 
@@ -2752,21 +3139,21 @@ submit_completion
 
 into the Artifact core specification.
 
-Rule 8
+#### Rule 8 — Do not implement host workflows
 
 The SDK does not implement host workflows.
 
-Rule 9
+#### Rule 9 — Treat security policies as declarations
 
 Security policies are declarations that hosts must enforce.
 
-Rule 10
+#### Rule 10 — Preserve cross-language semantics
 
 All language SDKs must represent the same protocol semantics.
 
 ---
 
-66. Final Domain Vocabulary
+### 66. Final Domain Vocabulary
 
 The initial Artifact SDK should revolve around these terms:
 
@@ -2809,7 +3196,7 @@ These form the initial language of the subsystem.
 
 ---
 
-67. Final Objective
+### 67. Final Objective
 
 The project should result in a reusable, language-neutral Artifact Specification that allows completely different applications to communicate using the same conceptual model.
 
