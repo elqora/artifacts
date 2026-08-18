@@ -1,6 +1,6 @@
 {
   "name": "@elqora/artifacts",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "TypeScript SDK for the language-neutral Elqora Artifact Protocol.",
   "type": "module",
   "sideEffects": false,

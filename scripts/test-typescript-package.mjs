@@ -44,7 +44,7 @@ try {
   ]);
   const packed = JSON.parse(packOutput)[0];
   assert.equal(packed.name, "@elqora/artifacts");
-  assert.equal(packed.version, "0.2.0");
+  assert.equal(packed.version, "0.2.1");
 
   const packedPaths = packed.files.map(({ path: filePath }) => filePath).sort();
   const allowed = /^(LICENSE|README\.md|package\.json|dist\/(?:generated\/)?[^/]+\.(?:js|js\.map|d\.ts|d\.ts\.map))$/;
